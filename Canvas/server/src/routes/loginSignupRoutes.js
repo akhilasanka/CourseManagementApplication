@@ -90,11 +90,7 @@ router.post('/login',function (req, res) {
     console.log(password);
     let enPassword = sha1(password);
     console.log("Encrypted password: "+enPassword);
-    let isFaculty = false;
-    if(req.body.isFaculty == "true"){
-      console.log("isFaculty is true"); 
-      isFaculty = true; 
-    }
+    let isFaculty = req.body.isFaculty;
     var user = isFaculty ? "faculty" : "student";
     let queryResult = [];
     const checkuser = async () => {

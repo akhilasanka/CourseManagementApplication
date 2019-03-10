@@ -1,0 +1,36 @@
+.modal-dialog{
+    
+    max-width: 350px;
+    margin-left: 77px;
+    margin-top: 0px;
+    height: 100vh;
+    }
+    
+    #profile,#course{
+    padding-left: 0px !important;
+    }
+    
+    .modal-content{
+        border-radius: 0px;
+        height: 100vh;
+    }
+    
+    .modal-title{
+        font-weight : 500;
+        color : black;
+    }
+    
+    .close{
+        margin : 6px;
+    }
+
+    .btn-sm{
+        border-color:#C0C0C0;
+        background-color: #DCDCDC;
+        margin-bottom: 30px;
+        margin-top: 15px;
+    }
+
+    .btn-sm:hover{
+        background-color: #C0C0C0;
+    }
