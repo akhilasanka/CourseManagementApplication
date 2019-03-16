@@ -18,6 +18,10 @@ import SubmitAssignments from './Courses/StudentViews/SubmitAssignments';
 import CourseFileUpload from './Courses/FacultyViews/CourseFileUpload';
 import DownloadFiles from './Courses/StudentViews/DowloadFiles';
 import CreateQuiz from './Courses/FacultyViews/CreateQuiz';
+import CreateAnnouncements from './Courses/FacultyViews/CreateAnnouncements';
+import ShowAnnouncements from './Courses/StudentViews/ShowAnnouncements';
+import ShowPeople from './Courses/StudentViews/ShowPeople';
+import ShowStudents from './Courses/FacultyViews/ShowStudents';
 
 //Create a Main Component
 class Main extends Component {
@@ -47,6 +51,10 @@ class Main extends Component {
                 <Route exact path="/student/course/:courseID/files" component={DownloadFiles}/>
                 <Route exact path="/faculty/course/:courseID/files" component={CourseFileUpload}/>
                 <Route exact path="/faculty/course/:courseID/Quiz" component={CreateQuiz}/>
+                <Route exact path="/faculty/course/:courseID/announcements" component={CreateAnnouncements}/>
+                <Route exact path="/student/course/:courseID/announcements" component={ShowAnnouncements}/>
+                <Route exact path="/student/course/:courseID/people" component={ShowPeople}/>
+                <Route exact path="/faculty/course/:courseID/people" component={ShowStudents}/>
                 <Route exact path="/student/course/:courseID" component={StudentCourseHome}/>
                 <Route exact path="/faculty/course/:courseID" component={FacultyCourseHome}/>
                 

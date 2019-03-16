@@ -25,6 +25,8 @@ class CourseNavFaculty extends Component {
         let coursehomeurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/assignments";
         let filesurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/files";
         let quizurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/quiz";
+        let announcementsurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/announcements";
+        let peopleurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/people";
         return (
             <div>
                 {redirectVar}
@@ -36,12 +38,12 @@ class CourseNavFaculty extends Component {
                             </Link>
                             </div>
                             <div className="row">
-                            <Link to= "#">
-                            <button type="button" className="btn btn-link float-left course-nav-btn">Announcemts</button>
+                            <Link to={announcementsurl}>
+                            <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
                             </Link>
                             </div>
                             <div className="row">
-                            <Link to= "#">
+                            <Link to= {peopleurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">People</button>
                             </Link>
                             </div>

@@ -22,6 +22,8 @@ class StudentCourseHome extends Component {
         let url = window.location.href;
         let coursehomeurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/assignments";
         let filesurl = "/student/course/"+this.props.match.params.courseID+ "/files";
+        let announcementsurl = "/student/course/"+this.props.match.params.courseID+ "/announcements";
+        let peopleurl = "/student/course/"+this.props.match.params.courseID+ "/people";
         return (
             <div>
                 {redirectVar}
@@ -42,12 +44,12 @@ class StudentCourseHome extends Component {
                             </Link>
                             </div>
                             <div className="row">
-                            <Link to= "#">
+                            <Link to= {announcementsurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">Announcemts</button>
                             </Link>
                             </div>
                             <div className="row">
-                            <Link to= "#">
+                            <Link to= {peopleurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">People</button>
                             </Link>
                             </div>

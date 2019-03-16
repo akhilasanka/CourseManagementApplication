@@ -1,7 +1,7 @@
 var mysql = require('promise-mysql');
 
 var dbConfig = {
-    connectionLimit: 100,
+    connectionLimit: 500,
     host:'localhost',
     user:'root',
     password:'password',

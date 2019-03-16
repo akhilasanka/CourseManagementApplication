@@ -180,5 +180,23 @@ module.exports = class courseDAO {
       await con.destroy();
     }
   }
+
+  async getPeople(courseID) {
+    let con = await dbConnection();
+    try {
+      await con.query("START TRANSACTION");
+      let result =
+        await con.query('SELECT s.id, s.name, c.dept FROM studentenrollment AS se LEFT JOIN student AS s ON se.student_id=s.id INNER JOIN course as c ON se.course_id=c.id WHERE se.course_id=?', [courseID]);
+      await con.query("COMMIT");
+      result = JSON.parse(JSON.stringify(result));
+      return result;
+    } catch (ex) {
+      console.log(ex);
+      throw ex;
+    } finally {
+      await con.release();
+      await con.destroy();
+    }
+  }
                 
 }

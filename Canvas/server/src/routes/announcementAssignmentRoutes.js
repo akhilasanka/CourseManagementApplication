@@ -28,7 +28,35 @@ router.get('/announcements',function(req,res){
     let courseID = req.query.courseID;
     var queryResult = [];
       const getAnnouncements = async () => {
-        queryResult = await announcementAssignmentDao.getAnnouncements("announcements",courseID);
+        queryResult = await announcementAssignmentDao.getAnnouncements(courseID);
+        if(queryResult[0]){
+          if(queryResult[0].id != null){
+            console.log("Data Found!");
+            res.status(200).json(queryResult);
+          }
+        }
+        else{
+          res.status(400).json({responseMessage: 'Record not found'});
+        }
+      }
+      try{
+        getAnnouncements();
+      }
+      catch(err){
+        console.log(err);
+        res.status(500).json({responseMessage: 'Database not responding'});
+      }
+  });
+
+  router.get('/faculty/announcements',function(req,res){
+    console.log("Inside get announcements");
+    console.log("Request params:");
+    console.log(req.query);
+    let courseID = req.query.courseID;
+    let facultyID = req.query.facultyID;
+    var queryResult = [];
+      const getAnnouncements = async () => {
+        queryResult = await announcementAssignmentDao.getAnnouncementsByFaculty(courseID,facultyID);
         if(queryResult[0]){
           if(queryResult[0].id != null){
             console.log("Data Found!");
@@ -57,11 +85,12 @@ router.get('/announcements',function(req,res){
       const addAnnouncements = async () => {
         let inputData = {
             "course_id" : req.body.courseID, 
-            "desc" : req.body.desc
+            "desc" : req.body.announcement,
+            "title": req.body.title
         }
-        queryResult = await aaBasicDao.createNewUser("announcements",inputData);
-        if(queryResult[0]){
-          if(queryResult[0].id != null){
+        queryResult = await aaBasicDao.createNewUser("announcement",inputData);
+        if(queryResult){
+          if(queryResult.id != null){
             console.log("announcement added");
             res.status(200).json({responseMessage: 'Successfully added Announcement!'});
           }

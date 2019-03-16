@@ -406,5 +406,32 @@ router.get('/studentRegisteredForACourse', function (req, res) {
   }
 });
 
+router.get('/people', function (req, res) {
+  console.log("Inside get people");
+  console.log("Request params:");
+  console.log(req.query);
+  let courseID = req.query.courseID;
+  var queryResult = [];
+  const getPeople = async () => {
+    queryResult = await courseDao.getPeople(courseID);
+    if (queryResult[0]) {
+      if (queryResult[0].name != null) {
+        console.log("Data Found!");
+        res.status(200).json(queryResult);
+      }
+    }
+    else {
+      res.status(400).json({ responseMessage: 'Record not found' });
+    }
+  }
+  try {
+    getPeople();
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ responseMessage: 'Database not responding' });
+  }
+});
+
 
 module.exports = router;

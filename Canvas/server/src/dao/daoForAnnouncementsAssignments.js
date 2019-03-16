@@ -6,7 +6,24 @@ module.exports = class announcementAssignmentDao {
         let con = await dbConnection();
         try {
           await con.query("START TRANSACTION");
-          let result = await con.query('SELECT `desc` FROM `announcement` WHERE course_id = ?', [courseID]);
+          let result = await con.query('SELECT * FROM `announcement` WHERE course_id = ?', [courseID]);
+          await con.query("COMMIT");
+          result = JSON.parse(JSON.stringify(result));
+          return result;
+        } catch (ex) {
+          console.log(ex);
+          throw ex;
+        } finally {
+          await con.release();
+          await con.destroy();
+        }
+      }
+
+      async getAnnouncementsByFaculty(courseID,facultyID){
+        let con = await dbConnection();
+        try {
+          await con.query("START TRANSACTION");
+          let result = await con.query('SELECT a.id, a.title, a.desc FROM `announcement` AS a LEFT JOIN `course` AS c ON a.course_id=c.id WHERE a.course_id = ? AND c.faculty_id=?', [courseID,facultyID]); 
           await con.query("COMMIT");
           result = JSON.parse(JSON.stringify(result));
           return result;
@@ -23,7 +40,7 @@ module.exports = class announcementAssignmentDao {
         let con = await dbConnection();
         try {
           await con.query("START TRANSACTION");
-          let result = await con.query('SELECT `desc` FROM `announcement` WHERE course_id = ?', [courseID]);
+          let result = await con.query('SELECT * FROM `announcement` WHERE course_id = ? ', [courseID]);
           await con.query("COMMIT");
           result = JSON.parse(JSON.stringify(result));
           return result;
