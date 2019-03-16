@@ -8,6 +8,7 @@ class Nav extends Component {
     constructor(props){
         super(props);
     }
+
     render() {
         return (
             <div className="navigation main-nav">
@@ -18,7 +19,7 @@ class Nav extends Component {
                             <img src={img} height="80px" width="77px" alt="SJSU" />
                         </li>
                         <li className="nav-item border-bottom">
-                            <a className="nav-link" href="#" data-toggle="modal" data-target="#profile" data-placement="right"><i className="fa fa-user"></i><br />
+                            <a className="nav-link" href="#" data-toggle="modal" data-target="#profile" data-placement="right" onClick={this.addAccountinfo}><i className="fa fa-user"></i><br />
                                 Account </a>
                                 <AccountModal/>
                         </li>

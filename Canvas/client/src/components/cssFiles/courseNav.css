@@ -1,0 +1,15 @@
+.course-nav-btn:focus{
+    background-color: #005a8b;
+    color: #fff;
+    text-decoration: none;
+}
+
+.course-nav-btn:hover {
+    background-color: #005a8b;
+    color: white; 
+    text-decoration: none;
+}
+
+.course-nav-btn{
+    color:black;
+}

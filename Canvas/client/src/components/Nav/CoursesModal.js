@@ -36,7 +36,7 @@ class CourseModal extends Component {
                 this.setState({
                     courses : this.state.courses.concat(response.data) 
                 });
-                console.log(this.state.courses);
+                console.log("courses",this.state.courses);
             });
     }
 

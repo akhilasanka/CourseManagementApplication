@@ -86,4 +86,43 @@ school= ?, hometown= ?, languages = ?, gender = ? WHERE id = ?`,[
             await con.destroy();
           }
     }
+
+    async addProfilePic(role, id, filename) {
+      let con = await dbConnection();
+      try {
+        await con.query("START TRANSACTION");
+        await con.query(`UPDATE ?? SET img = ? WHERE id = ?`, [
+            role,
+            filename,
+            id
+          ]);
+        await con.query("COMMIT");
+        return true;
+      } catch (ex) {
+        await con.query("ROLLBACK");
+        console.log(ex);
+        throw ex;
+      } finally {
+        await con.release();
+        await con.destroy();
+      }
+    }
+
+    async getProfilepic(table,id){
+      let con = await dbConnection();
+      try {
+          await con.query("START TRANSACTION");
+          let result = await con.query('SELECT img FROM ?? WHERE id = ?', [table, id]);
+          await con.query("COMMIT");
+          result = JSON.parse(JSON.stringify(result));
+          return result;
+        } catch (ex) {
+          console.log(ex);
+          throw ex;
+        } finally {
+          await con.release();
+          await con.destroy();
+        }
+      }
+
     }

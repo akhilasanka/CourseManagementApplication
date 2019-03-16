@@ -60,7 +60,7 @@ class AccountModal extends Component {
                                     
                                     </h4>
                                 </div>
-                                <button type="button" className="btn btn-sm text-center" onClick = {this.logout}>Log out</button>
+                                <button type="button" className="btn btn-sm text-center logout-btn" onClick = {this.logout}>Log out</button>
                             </div>
 
                                 <ul>

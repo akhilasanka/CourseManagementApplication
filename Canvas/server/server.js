@@ -11,7 +11,10 @@ var loginSignupRoutes = require('./src/routes/loginSignupRoutes');
 var profileRoutes = require('./src/routes/profileRoutes');
 var courseRoutes = require('./src/routes/courseRoutes');
 var announcementAssignmentRoutes = require('./src/routes/announcementAssignmentRoutes');
+var filesRoutes = require('./src/routes/filesRoutes');
 //var courseRoutes = require('./src/routes/quizRoutes');
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads/')));
 
 app.use(session({
     secret: 'cmpe273_canvas_node_react_mysql',
@@ -51,6 +54,9 @@ app.use('/', loginSignupRoutes);
 app.use('/', profileRoutes);
 app.use('/', courseRoutes);
 app.use('/', announcementAssignmentRoutes);
+app.use('/', filesRoutes);
+
+
 //app.use('/', quizRoutes);
 // console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));

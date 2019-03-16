@@ -6,16 +6,24 @@ import Home from './Home/Home';
 import Profile from './Profile/Profile';
 import NewCourse from './Courses/FacultyViews/NewCourse';
 import PermissionCode from './Courses/FacultyViews/PermissionCode';
-import Course from './Courses/Course';
+import StudentCourseHome from './Courses/StudentViews/StudentCourseHome';
+import FacultyCourseHome from './Courses/FacultyViews/FacultyCourseHome';
 import SearchCourse from './Courses/StudentViews/SearchCourse';
 import MyCourses from './Courses/StudentViews/MyCourses';
+import CreateAssignments from './Courses/FacultyViews/CreateAssignments';
+import CourseAssignmentSubmissions from './Courses/FacultyViews/CourseAssignmentSubmissions';
+import GradeAssignment from './Courses/FacultyViews/GradeAssignment';
+import ShowAssignments from './Courses/StudentViews/ShowAssignment';
+import SubmitAssignments from './Courses/StudentViews/SubmitAssignments';
+import CourseFileUpload from './Courses/FacultyViews/CourseFileUpload';
+import DownloadFiles from './Courses/StudentViews/DowloadFiles';
+import CreateQuiz from './Courses/FacultyViews/CreateQuiz';
 
 //Create a Main Component
 class Main extends Component {
     
 
     render(){
-        //let user = {'username': this.state.username , 'role': this.state.role }
         return(
             
             <div>
@@ -31,8 +39,18 @@ class Main extends Component {
                 <Route exact path="/faculty/permissionCode" component={PermissionCode}/>
                 <Route exact path="/student/course/search" component={SearchCourse}/>
                 <Route exact path="/student/course/my-courses" component={MyCourses}/>
-                <Route exact path="/student/course/:courseID" component={Course}/>
-                <Route exact path="/faculty/course/:courseID" component={Course}/>
+                <Route exact path="/faculty/course/:courseID/assignments/:assignmentID/student/:studentID" component={GradeAssignment}/>
+                <Route exact path="/faculty/course/:courseID/assignments/:assignmentID" component={CourseAssignmentSubmissions}/>
+                <Route exact path="/student/course/:courseID/assignments/:assignmentID" component={SubmitAssignments}/>
+                <Route exact path="/student/course/:courseID/assignments" component={ShowAssignments}/>
+                <Route exact path="/faculty/course/:courseID/assignments" component={CreateAssignments}/>
+                <Route exact path="/student/course/:courseID/files" component={DownloadFiles}/>
+                <Route exact path="/faculty/course/:courseID/files" component={CourseFileUpload}/>
+                <Route exact path="/faculty/course/:courseID/Quiz" component={CreateQuiz}/>
+                <Route exact path="/student/course/:courseID" component={StudentCourseHome}/>
+                <Route exact path="/faculty/course/:courseID" component={FacultyCourseHome}/>
+                
+                
             </div>
         )
     }
