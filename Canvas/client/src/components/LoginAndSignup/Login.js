@@ -17,7 +17,7 @@ class Login extends Component {
             password: "",
             authFlag: false,
             displayErrorMsg: false,
-            isFaculty: false
+            isFaculty: null
         }
         //Bind the handlers to this class
         this.submitLogin = this.submitLogin.bind(this);
@@ -26,21 +26,29 @@ class Login extends Component {
     componentWillMount() {
         this.setState({
             authFlag: false,
-            isFaculty: false
+            isFaculty: null
         })
     }
 
+    isFacultyChangeHandler = (e) => {
+        //console.log(e.target.checked);
+        if(e.target.checked){
+            this.setState({isFaculty : e.target.value})
+        }
+        if(!e.target.checked){
+            this.setState({isFaculty : null})
+        }
+        }
+
     //submit Login handler to send a request to the node backend
     submitLogin = async (event) => {
-        let isFaculty = false;
         event.preventDefault();
         const formData = new FormData(event.target);
-        if(formData.get('isFaculty')==="faculty");{
+        let isFaculty = false;
+        if(this.state.isFaculty === "faculty"){
             isFaculty = true;
-            this.setState({
-                isFaculty: isFaculty
-            });
         }
+        console.log(this.state.isFaculty);
         axios.defaults.withCredentials = true;
         await axios({
             method: 'post',
@@ -114,7 +122,7 @@ class Login extends Component {
                                             <div className="form-group">
                                                 <div className="form-check">
                                                     <input className="form-check-input" type="checkbox" value="faculty" name="isFaculty"
-                                                        style={{ marginTop: '0.5em' }} />
+                                                        style={{ marginTop: '0.5em' }} onChange={this.isFacultyChangeHandler} />
                                                     <label className="form-check-label" htmlFor="defaultCheck1">
                                                         <small>Login as faculty</small>
                                                     </label>

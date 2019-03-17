@@ -256,7 +256,7 @@ class Profile extends Component {
         }
         let divButton = null;
         if (this.state.showButton) {
-            divButton = <button type="submit" className="btn btn-primary" >Update Profile</button>
+            divButton = <button type="submit" className="btn btn-primary update-button" >Update Profile</button>
         }
         return (
             <div>

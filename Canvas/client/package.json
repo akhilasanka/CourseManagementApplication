@@ -9,6 +9,8 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "downloadjs": "^1.4.7",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.7",
     "react": "^16.8.3",

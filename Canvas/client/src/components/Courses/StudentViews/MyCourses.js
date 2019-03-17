@@ -68,7 +68,7 @@ class MyCourses extends Component {
 
             }
             return (
-                <tr key={record.index}>
+                <tr key={record.index} className="course-list">
                     <td>{record.courseID}</td>
                     <td>{record.courseName}</td>
                     <td>{record.dept}</td>
@@ -105,7 +105,7 @@ class MyCourses extends Component {
                                     <h3>My Courses</h3>
                                 </div>
                                 <small>*W indicates waitlist, E indicates enrolled</small>
-                                <table className="table table-striped table-bordered">
+                                <table className="table table-striped table-bordered course-table">
                                     <thead>
                                         <tr>
                                             <th>Course ID</th>

@@ -18,11 +18,12 @@ router.post('/signup',function (req, res) {
     let enPassword = sha1(password);
     console.log("Encrypted password: "+enPassword);
     let isFaculty = false;
-    if(req.body.isFaculty == "true"){
+    if(req.body.isFaculty == true){
       console.log("isFaculty is true"); 
       isFaculty = true; 
     }
     var user = isFaculty ? "faculty" : "student";
+    console.log(user);
     var queryResult = [];
     const createUserIfNotPresent = async () => {
       queryResult = await loginSignupDao.checkIfUserExists(user,formatEmail);
@@ -52,32 +53,6 @@ router.post('/signup',function (req, res) {
       res.status(500).json({responseMessage: 'Database not responding'});
     }
    
-   /* pool.query('SELECT * FROM ?? WHERE email = ?', [user, formatEmail], (error, rows) => {
-        if (error){
-            console.log(error);
-            console.log("unable to read the database");
-            res.status(500).json({responseMessage: 'Database not responding'});
-        } else {
-          if (rows.length > 0) {
-            console.log("User already exists!");
-            res.status(200).json({responseMessage: 'User already exists!'});
-          } else {
-              var inputData = {
-                "name": req.body.name,
-                "email": formatEmail,
-                "password": enPassword,
-              }
-              //Save the user in database
-              pool.query('INSERT INTO ?? SET ?',[user, inputData], function (err) {
-              if (err) {
-                console.log("unable to insert into database", err);
-                res.status(500).send("unable to insert into database");
-              } else {
-                console.log("User Added");
-              }});
-          }
-        }
-    });*/
 });
 
 router.post('/login',function (req, res) {

@@ -12,6 +12,7 @@ var profileRoutes = require('./src/routes/profileRoutes');
 var courseRoutes = require('./src/routes/courseRoutes');
 var announcementAssignmentRoutes = require('./src/routes/announcementAssignmentRoutes');
 var filesRoutes = require('./src/routes/filesRoutes');
+var StudentCourseRouteWithoutPooling = require('./src/routes/StudentCourseWithoutPooling');
 //var courseRoutes = require('./src/routes/quizRoutes');
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads/')));
@@ -55,6 +56,7 @@ app.use('/', profileRoutes);
 app.use('/', courseRoutes);
 app.use('/', announcementAssignmentRoutes);
 app.use('/', filesRoutes);
+//app.use('/', StudentCourseRouteWithoutPooling);
 
 
 //app.use('/', quizRoutes);

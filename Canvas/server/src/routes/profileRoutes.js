@@ -31,7 +31,7 @@ router.get('/profile', function (req, res) {
       if (queryResult[0].email != null) {
         console.log("Data Found!");
         let obj = queryResult[0];
-        delete queryResult['password'];
+        delete obj['password'];
         Object.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
         res.status(200).json(obj);
       }
