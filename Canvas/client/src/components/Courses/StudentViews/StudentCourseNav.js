@@ -49,12 +49,12 @@ class StudentCourseNav extends Component {
                             </div>
                             <div className="row">
                             <Link to={filesurl}>
-                            <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                            <button type="button" className="btn btn-link float-left course-nav-btn btn-assignment ">Files</button>
                             </Link>
                             </div>
                             <div className="row">
                             <Link to={quizurl}>
-                            <button type="button" className="btn btn-assignment btn-link float-left course-nav-btn">Quiz</button>
+                            <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
                             </Link>
                             </div>
                         </ul>

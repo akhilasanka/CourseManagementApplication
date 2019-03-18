@@ -109,7 +109,7 @@ class CreateAnnouncements extends Component {
                                         </div>
                                         <div className="form-group row border-bottom">
                                         <div className="col-sm-5">
-                                         <button type="submit" className="btn btn-primary pull-right" style={{marginBottom:"5%"}}>Create Assignment</button>
+                                         <button type="submit" className="btn btn-primary pull-right" style={{marginBottom:"5%"}}>Create Announcement</button>
                                         </div>
                                         </div>
 

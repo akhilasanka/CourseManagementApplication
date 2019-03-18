@@ -28,7 +28,7 @@ class CourseNavFaculty extends Component {
             redirectVar = <Redirect to="/login" />;
         }
         console.log(this.state.active);
-        let classes = classNames('btn btn-link float-left course-nav-btn ');
+        let classes = classNames('btn btn-link float-left course-nav-btn');
         let url = window.location.href;
         let coursehomeurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/assignments";
         let filesurl = "/faculty/course/"+url.substr(url.lastIndexOf('/') + 1) + "/files";
@@ -47,7 +47,7 @@ class CourseNavFaculty extends Component {
                             </div>
                             <div className="row">
                             <Link to={announcementsurl}>
-                            <button type="button" className="btn btn-link float-left course-nav-btn ">Announcements</button>
+                            <button type="button" className="btn btn-link float-left course-nav-btn active-css ">Announcements</button>
                             </Link>
                             </div>
                             <div className="row">
@@ -62,7 +62,7 @@ class CourseNavFaculty extends Component {
                             </div>
                             <div className="row">
                             <Link to= {quizurl}>
-                            <button type="button" className="btn btn-link float-left course-nav-btn active-css">Quiz</button>
+                            <button type="button" className="btn btn-link float-left course-nav-btn  ">Quiz</button>
                             </Link>
                             </div>
                         </ul>
