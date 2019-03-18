@@ -3,6 +3,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
+import swal from 'sweetalert';
 
 
 class PermissionCode extends Component {
@@ -95,7 +96,7 @@ class PermissionCode extends Component {
             })
             .then((responseData) => {
                 console.log(responseData);
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -133,6 +134,10 @@ class PermissionCode extends Component {
                 </tr>
             )
         });
+        let noRecordsMsgDiv = null;
+        if(this.state.waitlistedStudents.length === 0){
+            noRecordsMsgDiv = <tr><small>*No records to disply</small></tr>
+        }
         return (
             <div>
                 {redirectVar}
@@ -146,6 +151,7 @@ class PermissionCode extends Component {
                                 <div className="border-bottom row" style={{ marginBottom: "3%", marginTop:"2%" }}>
                                     <h3>Waitlist Students</h3>
                                 </div>
+                                
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
@@ -156,6 +162,7 @@ class PermissionCode extends Component {
                                             <th></th>
                                         </tr>
                                     </thead>
+                                    {noRecordsMsgDiv}
                                     <tbody>
                                         {waitlistStudentsDiv}
                                     </tbody>

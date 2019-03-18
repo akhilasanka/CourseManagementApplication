@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseAssignment.css';
+import download from 'downloadjs';
 
 class CourseAssignmentSubmissions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            submissionDetails : []
+            submissionDetails : [],
+            base64str: null
         }
     }
 
@@ -37,7 +39,41 @@ class CourseAssignmentSubmissions extends Component {
     openSubmissions = (event,record) =>{
         event.preventDefault();
      let url = window.location.href;
-     window.location = url + "/student/" + record.student_id;
+     window.location = url + "/student/" + record.student_id+"/assignmentFile/"+record.id;
+    }
+
+    downloadFile = (event, file) => {
+        event.preventDefault();
+        axios({
+            method: 'get',
+            url: 'http://localhost:3001/file/base64str',
+            params: { "fileName": file, "isAssignment" : true },
+            config: { headers: { 'Content-Type': 'application/json' } }
+        })
+            .then((response) => {
+                return response.data.base64str;
+            }).then((base64str) => {
+                this.setState({
+                    base64str: base64str
+                });
+                let arr = null;
+                if (this.state.base64str != null) {
+                    arr = _base64ToArrayBuffer(this.state.base64str);
+                    download(arr,file,"text/plain");
+                }
+            }).catch(function (err) {
+                console.log(err)
+            }); 
+
+        function _base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
     }
 
     render() {
@@ -53,6 +89,7 @@ class CourseAssignmentSubmissions extends Component {
                     <td>{record.student_id}</td>
                     <td><a href="" onClick={(event)=>this.openSubmissions(event,record)}>{record.file_name}</a></td>
                     <td>{record.marks}</td>
+                    <td><button type="button" className="btn btn-primary" onClick={(e)=>this.downloadFile(e,record.file_name)}>Download</button> </td>
                 </tr>
             )
             });
@@ -82,6 +119,7 @@ class CourseAssignmentSubmissions extends Component {
                                             <th>Student ID</th>
                                             <th>File</th>
                                             <th>Marks</th>
+                                            <th>Download File</th>
                                         </tr>
                                     </thead>
                                     <tbody>

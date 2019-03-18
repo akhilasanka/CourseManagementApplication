@@ -39,8 +39,6 @@ class CreateAnnouncements extends Component {
         event.preventDefault();
         var id = this.props.match.params.courseID;
         console.log(this.props.match.params);
-        //console.log("id",id);
-        var facultyID = cookie.load('cookie2');
         const formData = new FormData(event.target);
        await axios({
             method: 'post',

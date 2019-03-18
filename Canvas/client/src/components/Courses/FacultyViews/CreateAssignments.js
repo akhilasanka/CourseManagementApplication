@@ -99,7 +99,7 @@ class CreateAssignments extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <CourseNav />
                                     </div>
                                     <div className="col-10">
                                     <form onSubmit={this.createNewAssignment} method="post">

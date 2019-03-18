@@ -3,81 +3,55 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
+import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseAssignment.css';
+import swal from 'sweetalert';
 
 
-class ShowStudents extends Component {
+class Quiz extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentDetails : []
+            quizDetails : []
         }
     }
 
     componentWillMount(){
-        var id = this.props.match.params.courseID;
-        console.log(id);
+        var courseID = this.props.match.params.courseID;
+        console.log(courseID);
         axios({
             method: 'get',
-            url: 'http://localhost:3001/people',     
-            params: { "courseID": id },
+            url: 'http://localhost:3001/student/quiz',     
+            params: { "courseID": courseID },
             config: { headers: { 'Content-Type': 'application/json' } }
         })
                 .then((response) => {
                 //update the state with the response data
                 this.setState({
-                    studentDetails : this.state.studentDetails.concat(response.data) 
+                    quizDetails : this.state.quizDetails.concat(response.data) 
                 });
-                console.log("details data",this.state.studentDetails);
+                console.log("details data",this.state.quizDetails);
             });
     }
 
-
-    drop = async (event,studentID) => {
+    openQuizQuestionsPage = (event,quizID) =>{
         event.preventDefault();
-        var courseID = this.props.match.params.courseID;
-        await axios({
-            method: 'delete',
-            url: 'http://localhost:3001/student/course/delete',     
-            params: {courseID : courseID, studentID : studentID},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        })
-            .then((response) => {
-                if (response.status >= 500) {
-                    throw new Error("Bad response from server");
-                }
-                console.log(response);
-                return response.data;
-            })
-            .then((responseData) => {
-                //console.log(responseData);
-                alert(responseData.responseMessage);
-                window.location.reload();
-            }).catch(function (err) {
-                console.log(err)
-            }); 
+     let url = window.location.href;
+     window.location = url + "/" + quizID;
     }
-
+    
     render() {
-        var id = this.props.match.params.courseID;
         let redirectVar = null;
         let role = cookie.load('cookie1');
-        if (role != "faculty") {
+        if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }
-        let noRecordsMsgDiv = null;
-        if(this.state.studentDetails.length === 0){
-            noRecordsMsgDiv = <tr><small>*No records to disply</small></tr>
-        }
-        let studentDetailsDiv = this.state.studentDetails.map((record,index) => {
+        let quizDetailsDiv = this.state.quizDetails.map((record,index) => {
             return (
                 <tr key={record.id}>
-                    <td>{record.name}</td>
-                    <td>{record.dept} {id}</td>
-                    <td>Student</td>
-                    <td><button type="button" className="btn btn-primary" onClick={(e)=>this.drop(e,record.id)}>Drop</button> </td>
+                    <td><a href="" onClick={(event)=>this.openQuizQuestionsPage(event,record.id)}>{record.title}</a></td>
+                    <td>{record.points}</td>
                 </tr>
             )
             });
@@ -93,29 +67,24 @@ class ShowStudents extends Component {
                         
                             <div className="col-12">
                                 <div className="border-bottom row" style={{ marginBottom: "3%", marginTop: "2%" }}>
-                                    <h3>People</h3>
+                                    <h3>Quizzes</h3>
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <CourseNav />
                                     </div>
                                     <div className="col-10">
-                                    <div>
-                                        {noRecordsMsgDiv}
                                             <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Course</th>
-                                            <th>Role</th>
-                                            <th></th>
+                                            <th>Title</th>
+                                            <th>Points</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {studentDetailsDiv}
+                                        {quizDetailsDiv}
                                     </tbody>
                                 </table>
-                                        </div>
                                         </div>
                                         
                                 </div>
@@ -130,4 +99,4 @@ class ShowStudents extends Component {
 
 }
 
-export default ShowStudents;
+export default Quiz;

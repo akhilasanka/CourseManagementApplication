@@ -17,16 +17,13 @@ router.post('/signup',function (req, res) {
     console.log(password);
     let enPassword = sha1(password);
     console.log("Encrypted password: "+enPassword);
-    let isFaculty = false;
-    if(req.body.isFaculty == true){
-      console.log("isFaculty is true"); 
-      isFaculty = true; 
-    }
+    let isFaculty = req.body.isFaculty;
     var user = isFaculty ? "faculty" : "student";
     console.log(user);
     var queryResult = [];
     const createUserIfNotPresent = async () => {
-      queryResult = await loginSignupDao.checkIfUserExists(user,formatEmail);
+      queryResult = await loginSignupDao.checkIfEmailExists(user,formatEmail);
+      console.log(queryResult);
       if(queryResult[0]){
         if(queryResult[0].email != null){
           console.log("User already exists!");

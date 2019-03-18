@@ -6,45 +6,100 @@ import { Link } from 'react-router-dom';
 import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseAssignment.css';
-import Question from './QuizQuestion';
+import swal from 'sweetalert';
 
 
 class CreateQuiz extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quizDetails: [],
-            index: 0,
-            addQuestion: false,
-            questionDiv: null,
-            questions: []
+            quizDetails : []
         }
     }
 
-    componentWillMount() {
+    componentWillMount(){
         var courseID = this.props.match.params.courseID;
+        console.log(courseID);
+        var facultyID = cookie.load('cookie2');
         axios({
             method: 'get',
-            url: 'http://localhost:3001/quiz/list',
-            params: { "courseID": courseID },
+            url: 'http://localhost:3001/quiz',     
+            params: { "courseID": courseID , "facultyID" : facultyID },
             config: { headers: { 'Content-Type': 'application/json' } }
         })
-            .then((response) => {
+                .then((response) => {
                 //update the state with the response data
                 this.setState({
-                    fiquizDetailsleDetails: this.state.quizDetails.concat(response.data)
+                    quizDetails : this.state.quizDetails.concat(response.data) 
                 });
-                console.log("details data", this.state.quizDetails);
+                console.log("details data",this.state.quizDetails);
             });
     }
 
-    addQuestion = (event) => {
+    createNewQuiz = async (event) => {
         event.preventDefault();
-        this.setState({ addQuestion: true });
-        if(this.state.index>1){
-        }
+        var id = this.props.match.params.courseID;
+        console.log(this.props.match.params);
+        const formData = new FormData(event.target);
+       await axios({
+            method: 'post',
+            url: 'http://localhost:3001/quiz',     
+            data: { "courseID": id, "title": formData.get("title"), "points": formData.get("points")},
+            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+            .then((response) => {
+                if (response.status >= 500) {
+                    throw new Error("Bad response from server");
+                }
+                console.log(response);
+                return response.data;
+            })
+            .then((responseData) => {
+                alert(responseData.responseMessage);
+                window.location.reload();
+            }).catch(function (err) {
+                console.log(err)
+            }); 
+    }
 
-        this.setState({ index: this.state.index+1 });
+    publishQuiz = (event,quizID) => {
+        axios({
+            method: 'put',
+            url: 'http://localhost:3001/quiz',     
+            params: { quizID: quizID, isPublished:true },
+            config: { headers: { 'Content-Type': 'application/json' } }
+        })
+                .then((response) => {
+                    swal(response.data.responseMessage);
+            }).then(()=>{
+                window.location.reload();
+            }
+                
+            )
+
+    }
+
+    openQuestions = (event,quizID) =>{
+        event.preventDefault();
+     let url = window.location.href;
+     window.location = url + "/" + quizID+"/question/1";
+    }
+
+    getRow = (isPublished) => {
+        if(isPublished === 1){
+            return "Yes";
+        }
+        else{
+            return "No";
+        }
+    }
+    getStyle = (isPublished) => {
+        if(isPublished === 1){
+            return {display:"none"};
+        }
+        else{
+            return {display:"block"};
+        }
     }
 
     render() {
@@ -53,74 +108,85 @@ class CreateQuiz extends Component {
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
-        let quizDetailsDiv = null;
-        quizDetailsDiv = this.state.quizDetails.map((record, index) => {
+        let quizDetailsDiv = this.state.quizDetails.map((record,index) => {
             return (
-                <tr key={index}>
-                    <td>{record.title}</td>
+                <tr key={record.id}>
+                    <td><a href="" onClick={(event)=>this.openQuestions(event,record.id)}>{record.title}</a></td>
+                    <td>{record.points}</td>
+                    <td>{this.getRow(record.isPublished)}</td>
+                    <td><button type="button" className="btn btn-primary" onClick={(event)=>this.publishQuiz(event,record.id)} style={this.getStyle(record.isPublished)}>Publish</button></td>
                 </tr>
             )
-        });
-        let question = null;
-        let heading = null;
-        if (this.state.addQuestion) {
-           heading = <div className="form-group row">
-                        <h6>Question {this.state.index}</h6>
-                      </div>;
-            question = <Question />;
-        }
-
+            });
         return (
             <div>
                 {redirectVar}
                 <div className='rowC' style={{ display: "flex", flexDirection: "row" }}>
-                    <Navigation />
-
+                    <Navigation/>
+                   
                     <div className="container">
-
+                        
                         <div className="row justify-content-center align-items-center" >
-
+                        
                             <div className="col-12">
                                 <div className="border-bottom row" style={{ marginBottom: "3%", marginTop: "2%" }}>
-                                    <h3>Course Files Upload</h3>
+                                    <h3>Quizzes</h3>
                                 </div>
                                 <div className="row">
-                                    <div className="col-2">
-                                        <CourseNav />
+                                    <div className="col-2"> 
+                                    <CourseNav />
                                     </div>
                                     <div className="col-10">
-                                        <form onSubmit={this.addQuiz} method="post">
-                                            {heading}
-                                            {question}
-                                            <div className="form-group row border-bottom">
-                                                <div className="col-sm-5">
-                                                    <button type="submit" className="btn btn-primary text-center" style={{ marginBottom: "5%" }} onClick={this.addQuestion}>+New question</button>
-                                                </div>
-                                                <div className="col-sm-5">
-                                                    <button type="submit" className="btn btn-primary pull-right" style={{ marginBottom: "5%" }}>Submit</button>
-                                                </div>
-
+                                    <form onSubmit={this.createNewQuiz} method="post">
+                                    <div className="form-group row">
+                                            <label htmlFor="title" className="col-sm-2 col-form-label">Quiz Title:</label>
+                                            <div className="col-sm-5">
+                                                <input type="text" className="form-control" name="title" required />
                                             </div>
-                                        </form>
-                                        <div>
-                                            <h4 style={{ padding: "0.5em" }}>Published Quizzes</h4>
-                                            <table className="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Title</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {quizDetailsDiv}
-                                                </tbody>
-                                            </table>
                                         </div>
-                                    </div>
+                                        <div className="form-group row">
+                                                <label htmlFor="points" className="col-sm-2 col-form-label">Points:</label>
+                                                <div className="col-sm-5">
+                                                <input type="number" className="form-control" id="points" name="points"/>
+                                                </div>
+                                        </div>
+                                        <div className="form-group row">
+                                                <label htmlFor="publishTo" className="col-sm-2 col-form-label">Publish to:</label>
+                                        <div className="col-sm-5">
+                                                    <select className="form-control" name="publishTo" style={{padding:"0em",width:"50%"}}>
+                                                        <option value="all">All Students</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                        <div className="form-group row border-bottom">
+                                        <div className="col-sm-5">
+                                         <button type="submit" className="btn btn-primary pull-right" style={{marginRight:"6em",marginBottom:"5%"}}>Create Quiz</button>
+                                        </div>
+                                        </div>
 
+                                    </form>
+                                    <div>
+                                            <h4 style={{padding:"0.5em"}}>Quizzes</h4>
+                                            <table className="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Points</th>
+                                            <th>Is Published?</th>
+                                            <th>Publish</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {quizDetailsDiv}
+                                    </tbody>
+                                </table>
+                                        </div>
+                                        </div>
+                                        
                                 </div>
                             </div>
                         </div>
-
+                       
                     </div>
                 </div>
             </div>

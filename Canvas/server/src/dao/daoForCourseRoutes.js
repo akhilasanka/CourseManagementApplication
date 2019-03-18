@@ -58,7 +58,7 @@ module.exports = class courseDAO {
     let con = await dbConnection();
     try {
       await con.query("START TRANSACTION");
-      let result = await con.query('SELECT c.id AS courseID, c.name AS courseName, c.dept AS dept, c.courseTerm, s.status, c.room, f.name AS facultyName, f.email AS facultyEmail FROM studentenrollment AS s LEFT JOIN course c ON s.course_id=c.id LEFT JOIN faculty f ON c.faculty_id=f.id WHERE s.student_id=? ORDER BY c.id', [studentID]);
+      let result = await con.query('SELECT c.id AS courseID, c.name AS courseName, c.dept AS dept, c.courseTerm, s.status, s.grade, c.room, f.name AS facultyName, f.email AS facultyEmail FROM studentenrollment AS s LEFT JOIN course c ON s.course_id=c.id LEFT JOIN faculty f ON c.faculty_id=f.id WHERE s.student_id=? ORDER BY c.id', [studentID]);
       await con.query("COMMIT");
       result = JSON.parse(JSON.stringify(result));
       return result;

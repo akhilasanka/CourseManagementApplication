@@ -263,12 +263,10 @@ router.get('/announcements',function(req,res){
     console.log("Inside get assignment submissions");
     console.log("Request params:");
     console.log(req.query);
-    let courseID = req.query.courseID;
-    let studentID = req.query.studentID;
-    let assignmentID = req.query.assignmentID;
+    let submissionID = req.query.submissionID;
     var queryResult = [];
       const getAssignmentSubmissionFile = async () => {
-        queryResult = await announcementAssignmentDao.getAssignmentSubmissionFile(assignmentID,studentID,courseID);
+        queryResult = await announcementAssignmentDao.getAssignmentSubmissionFile(submissionID);
         if(queryResult[0]){
           console.log("file name:"+queryResult[0].file_name);
           fileName = queryResult[0].file_name;
@@ -278,8 +276,8 @@ router.get('/announcements',function(req,res){
         }
         let pdfPath = "C:/Users/akhila/Documents/sjsu/sem1/273/lab1/CMPE273-SP19-60/Canvas/server/uploads/assignmentsubmissions/"+fileName;
         var base64str = base64_encode(pdfPath);
-        console.log(base64str);
-        res.status(200).json({base64str : base64str});
+        console.log("base64str of pdf sent");
+        res.status(200).json({base64str : base64str, marks: queryResult[0].marks});
         }
         else{
           res.status(400).json({responseMessage: 'Record not found'});
@@ -333,6 +331,33 @@ router.get('/announcements',function(req,res){
   var base64str = base64_encode(pdfPath);
   console.log(base64str);
   res.status(200).json({base64str : base64str});
+  });
+
+
+  router.put('/assignments/marks',function(req,res){
+    console.log("Inside get assignments");
+    console.log("Request params:");
+    console.log(req.query);
+    let submissionID = req.query.submissionID;
+    let marks = req.query.marks;
+    var queryResult = [];
+      const updateMarks = async () => {
+        queryResult = await announcementAssignmentDao.updateMarks(submissionID,marks);
+        if(queryResult){
+            console.log("Marks Updated!");
+            res.status(200).json({responseMessage: "Marks Updated!"});
+        }
+        else{
+          res.status(400).json({responseMessage: 'Record not found'});
+        }
+      }
+      try{
+        updateMarks();
+      }
+      catch(err){
+        console.log(err);
+        res.status(500).json({responseMessage: 'Database not responding'});
+      }
   });
   
 

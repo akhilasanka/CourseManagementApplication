@@ -1,4 +1,4 @@
-.course-nav-btn:focus{
+.course-nav-btn:active{
     background-color: #005a8b;
     color: #fff;
     text-decoration: none;
@@ -12,4 +12,10 @@
 
 .course-nav-btn{
     color:black;
+}
+
+.active-css{
+    background-color: #005a8b;
+    color: #fff;
+    text-decoration: none;
 }

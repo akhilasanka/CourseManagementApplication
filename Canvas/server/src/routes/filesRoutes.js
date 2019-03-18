@@ -82,13 +82,21 @@ router.post('/files/upload',upload.single('selectedFile'),function(req,res){
     console.log("Request params:");
     console.log(req.query);
     let fileName = req.query.fileName;
+    let isAssignment = req.query.isAssignment;
     console.log(fileName);
     function base64_encode(file) {
             var bitmap = fs.readFileSync(file);
             return new Buffer(bitmap).toString('base64');
         }
     try{
-        let filePath = "C:/Users/akhila/Documents/sjsu/sem1/273/lab1/CMPE273-SP19-60/Canvas/server/uploads/courseFiles/"+fileName;
+      let filePath = null;
+      if(isAssignment){
+        filePath = "C:/Users/akhila/Documents/sjsu/sem1/273/lab1/CMPE273-SP19-60/Canvas/server/uploads/assignmentsubmissions/"+fileName;
+      }
+      else{
+        filePath = "C:/Users/akhila/Documents/sjsu/sem1/273/lab1/CMPE273-SP19-60/Canvas/server/uploads/courseFiles/"+fileName;
+      }
+       
         var base64str = base64_encode(filePath);
         console.log(base64str);
         res.status(200).json({base64str : base64str});

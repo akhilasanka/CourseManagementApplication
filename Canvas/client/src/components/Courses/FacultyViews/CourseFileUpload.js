@@ -85,7 +85,7 @@ class CourseFileUpload extends Component {
         fileDetailsDiv = this.state.fileDetails.map((record,index) => {
             return (
                 <tr key={index}>
-                    <td>{record.file_name}</td>
+                    <td><a href="">{record.file_name}</a></td>
                 </tr>
             )
             });

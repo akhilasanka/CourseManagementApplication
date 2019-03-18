@@ -3,6 +3,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
+import swal from 'sweetalert';
 
 class MyCourses extends Component {
     constructor(props) {
@@ -74,6 +75,7 @@ class MyCourses extends Component {
                     <td>{record.dept}</td>
                     <td>{record.courseTerm}</td>
                     <td>{record.status}</td>
+                    <td>{record.grade}</td>
                     <td>{record.room}</td>
                     <td>{record.facultyName}</td>
                     <td>{record.facultyEmail}</td>
@@ -113,6 +115,7 @@ class MyCourses extends Component {
                                             <th>Department</th>
                                             <th>Term</th>
                                             <th>Status</th>
+                                            <th>Grade</th>
                                             <th>Class Room</th>
                                             <th>Faculty Name</th>
                                             <th>Faculty Email</th>

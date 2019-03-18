@@ -125,4 +125,21 @@ school= ?, hometown= ?, languages = ?, gender = ? WHERE id = ?`,[
         }
       }
 
+      async checkIfEmailExists(table,email){
+        let con = await dbConnection();
+        try {
+            await con.query("START TRANSACTION");
+            let result = await con.query('SELECT * FROM ?? WHERE email = ?', [table, email]);
+            await con.query("COMMIT");
+            result = JSON.parse(JSON.stringify(result));
+            return result;
+          } catch (ex) {
+            console.log(ex);
+            throw ex;
+          } finally {
+            await con.release();
+            await con.destroy();
+          }
+    }
+
     }

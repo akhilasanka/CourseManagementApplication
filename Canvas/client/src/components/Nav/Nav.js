@@ -3,10 +3,19 @@ import '../cssFiles/homeNav.css';
 import img from '../images/sjsu.PNG';
 import AccountModal from './AccountModal';
 import CourseModal from './CoursesModal';
+import cookie from 'react-cookies';
 
 class Nav extends Component {
     constructor(props){
         super(props);
+    }
+    openHomePage = () => {
+        if (cookie.load('cookie1') == "faculty") {
+            window.location = "/faculty/home";
+        }
+        if (cookie.load('cookie1') == "student") {
+            window.location = "/student/home";
+        }
     }
 
     render() {
@@ -25,7 +34,7 @@ class Nav extends Component {
                         </li>
 
                         <li className="nav-item border-bottom">
-                            <a className="nav-link" href="#"><i className="fa fa-list-alt"></i><br />
+                            <a className="nav-link" href="#" onClick={this.openHomePage}><i className="fa fa-list-alt"></i><br />
                                 Dashboard</a>
                         </li>
                         <li className="nav-item border-bottom">

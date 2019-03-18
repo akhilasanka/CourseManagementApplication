@@ -45,6 +45,12 @@ class SubmitAssignments extends Component {
         }
     }
 
+    openSubmissions = (event,record) =>{
+        event.preventDefault();
+     let url = window.location.href;
+     window.location = url + "/assignmentFile/"+record.id;
+    }
+
     submitAssignment = async (event) => {
         event.preventDefault();
         const formDataCurrent = new FormData(event.target);
@@ -91,7 +97,7 @@ class SubmitAssignments extends Component {
         let submissionDiv = this.state.assignmentDetails.map((record,index) => {
             return (
                 <tr key={record.id}>
-                    <td>{record.file_name}</td>
+                    <td><a href="" onClick={(event)=>this.openSubmissions(event,record)}>{record.file_name}</a></td>
                     <td>{record.comments}</td>
                 </tr>
             )

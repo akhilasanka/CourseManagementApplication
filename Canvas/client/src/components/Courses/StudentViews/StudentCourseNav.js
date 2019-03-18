@@ -26,6 +26,7 @@ class StudentCourseNav extends Component {
         let filesurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/files";
         let announcementsurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/announcements";
         let peopleurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/people";
+        let quizurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/quiz";
         return (
             <div>
                 {redirectVar}
@@ -33,7 +34,7 @@ class StudentCourseNav extends Component {
                         <ul style={{listStyleType:"none", paddingLeft:"0px"}}>
                             <div className="row">
                             <Link to={coursehomeurl}>
-                            <button type="button" className="btn active btn-link float-left course-nav-btn btn-assignment">Assignments</button>
+                            <button type="button" className="btn  btn-link float-left course-nav-btn ">Assignments</button>
                             </Link>
                             </div>
                             <div className="row">
@@ -43,12 +44,17 @@ class StudentCourseNav extends Component {
                             </div>
                             <div className="row">
                             <Link to= {peopleurl}>
-                            <button type="button" className="btn btn-link float-left course-nav-btn">People</button>
+                            <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
                             </Link>
                             </div>
                             <div className="row">
                             <Link to={filesurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                            </Link>
+                            </div>
+                            <div className="row">
+                            <Link to={quizurl}>
+                            <button type="button" className="btn btn-assignment btn-link float-left course-nav-btn">Quiz</button>
                             </Link>
                             </div>
                         </ul>

@@ -24,8 +24,10 @@ class Profile extends Component {
             showButton: false,
             image: false,
             selectedFile: '',
-            preview : null,
-            src : ''
+            preview: null,
+            src: '',
+            img: null,
+            imgName: null
         }
         this.editProfile = this.editProfile.bind(this);
         this.updateProfile = this.updateProfile.bind(this);
@@ -103,29 +105,32 @@ class Profile extends Component {
                             });
                         }
                     }
-                }).catch(function (err) {
-                    console.log(err)
-                });
-
-
-            axios({
-                method: 'get',
-                url: 'http://localhost:3001/profile/img',
-                params: { "id": id, "role": role },
-                config: { headers: { 'Content-Type': 'application/json' } }
-            })
-                .then((response) => {
-                    if (response.status >= 500) {
-                        throw new Error("Bad response from server");
+                    if (responseData.img != null) {
+                        this.setState({
+                            imgName: responseData.img
+                        });
+                        axios({
+                            method: 'get',
+                            url: 'http://localhost:3001/profile/img',
+                            params: { "id": id, "role": role },
+                            config: { headers: { 'Content-Type': 'application/json' } }
+                        })
+                            .then((response) => {
+                                if (response.status >= 500) {
+                                    throw new Error("Bad response from server");
+                                }
+                                console.log(response);
+                                return response.data;
+                            })
+                            .then((responseData) => {
+                                console.log(responseData.base64str);
+                                this.setState({
+                                    img: "data:image/png;base64," + responseData.base64str
+                                });
+                            }).catch(function (err) {
+                                console.log(err)
+                            });
                     }
-                    console.log(response);
-                    return response.data;
-                })
-                .then((responseData) => {
-                    console.log(responseData.base64str);
-                    this.setState({
-                        img : "data:image/png;base64,"+responseData.base64str
-                    });
                 }).catch(function (err) {
                     console.log(err)
                 });
@@ -140,7 +145,7 @@ class Profile extends Component {
 
     onCrop(preview) {
         this.setState({ preview });
-        console.log("preview",this.state.preview);
+        console.log("preview", this.state.preview);
     }
 
     editProfile = () => {
@@ -162,7 +167,7 @@ class Profile extends Component {
             data: {
                 "id": id, "table": role, "name": formData.get('name'), "phoneNumber": formData.get('phoneNumber'),
                 "country": formData.get('country'), "school": formData.get('school'), "hometown": formData.get('hometown'),
-                "languages": formData.get('languages'), "gender": this.state.gender
+                "languages": formData.get('languages'), "gender": this.state.gender, "img": this.state.imgName
             },
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
@@ -185,7 +190,7 @@ class Profile extends Component {
         //console.log(e.target.files[0]);
         this.setState({ selectedFile: e.target.files[0] });
         //console.log("state",this.state.selectedFile);
-        
+
         var id = cookie.load('cookie2');
         var role = cookie.load('cookie1');
         let formData = new FormData();
@@ -214,11 +219,11 @@ class Profile extends Component {
             });
     }
 
-    updateProfilePic  = async (e) => {
+    updateProfilePic = async (e) => {
         //console.log(e.target.files[0]);
         this.setState({ selectedFile: e.target.files[0] });
         //console.log("state",this.state.selectedFile);
-        
+
         var id = cookie.load('cookie2');
         var role = cookie.load('cookie1');
         let formData = new FormData();
@@ -230,6 +235,32 @@ class Profile extends Component {
             method: 'post',
             url: 'http://localhost:3001/img/upload',
             data: formData,
+            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+            .then((response) => {
+                if (response.status >= 500) {
+                    throw new Error("Bad response from server");
+                }
+                console.log(response);
+                return response.data;
+            })
+            .then((responseData) => {
+                alert(responseData.responseMessage);
+                window.location.reload();
+            }).catch(function (err) {
+                console.log(err)
+            });
+    }
+
+    removePic = async (e) => {
+
+        var id = cookie.load('cookie2');
+        var role = cookie.load('cookie1');
+
+        await axios({
+            method: 'put',
+            url: 'http://localhost:3001/img',
+            data: {id:id, role:role},
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
             .then((response) => {
@@ -254,10 +285,40 @@ class Profile extends Component {
         if (!cookie.load('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
+        let removePicButton = null;
         let divButton = null;
         if (this.state.showButton) {
-            divButton = <button type="submit" className="btn btn-primary update-button" >Update Profile</button>
+            divButton = <button type="submit" className="btn btn-primary update-button" style={{marginLeft:"6.5em"}} >Update Profile</button>
+            removePicButton = <button type="button" className="btn btn-primary btn-sm" style={{marginLeft:"4em"}} onClick={this.removePic}>Remove Pic</button>
         }
+        let defaultIMGDiv = (<div className='buttons fadein'>
+            <div className='button'>
+                <label htmlFor='single'>
+                    <div style={{ fontSize: "130px", marginLeft: "0.25em" }}>
+                        <i className="fa fa-user fa-10x"></i>
+                    </div>
+                </label>
+                <input type='file' id='single' name="selectedFile" onChange={this.onPicUpload} style={{ height: "0px", width: "0px" }} accept="image/x-png,image/gif,image/jpeg" />
+            </div>
+
+        </div>);
+        let imgDiv = defaultIMGDiv;
+        if (this.state.img != null) {
+            console.log("has profile pic");
+            imgDiv =  (<div className='buttons fadein'>
+            <div className='button'>
+                <label htmlFor='single'>
+                    <div className="image-cropper">
+                        <img src={this.state.img} alt="Profile pic"></img>
+
+                    </div>
+                </label>
+                <input type='file' id='single' name="selectedFile" onChange={this.onPicUpload} style={{ height: "0px", width: "0px" }} accept="image/x-png,image/gif,image/jpeg" />
+            </div>
+
+        </div>);
+        }
+        
         return (
             <div>
                 {redirectVar}
@@ -282,36 +343,21 @@ class Profile extends Component {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-2">
+                                            <div className="col-3">
                                                 <div className="form-group row">
 
-                                                    <div className='buttons fadein'>
-                                                        <div className='button'>
-                                                            <label htmlFor='single'>
-                                                                <div style={{ fontSize: "130px", marginLeft: "0.25em" }}>
-                                                                    <i className="fa fa-user fa-10x"></i>
-                                                                </div>
-                                                            </label>
-                                                            <input type='file' id='single' name="selectedFile" onChange={this.onPicUpload} style={{ height: "0px", width: "0px" }} accept="image/x-png,image/gif,image/jpeg" />
-                                                        </div>
-
-                                                    </div>
-                                                    <div className='buttons fadein'>
-                                                        <div className='button'>
-                                                            <label htmlFor='single'>
-                                                            <div className="image-cropper">
-                                                        <img src={this.state.img} alt="Profile pic"></img>
-                                                       
-                                                    </div>
-                                                            </label>
-                                                            <input type='file' id='single' name="selectedFile" onChange={this.onPicUpload} style={{ height: "0px", width: "0px" }} accept="image/x-png,image/gif,image/jpeg" />
-                                                        </div>
-
-                                                    </div>
+                                                {imgDiv}
+                                                 {removePicButton}  
                                                 </div>
                                             </div>
 
-                                            <div className="col-9">
+                                            <div className="col-7">
+                                            <div className="form-group row">
+                                                    <label htmlFor="country" className="col-sm-2 col-form-label">Name:</label>
+                                                    <div className="col-sm-6">
+                                                        <input type="text" className="form-control" name="name" defaultValue={this.state.name} required readOnly={this.state.readonly} />
+                                                    </div>
+                                                </div>
                                                 <div className="form-group row">
                                                     <label htmlFor="country" className="col-sm-2 col-form-label">Phone number:</label>
                                                     <div className="col-sm-6">
@@ -349,11 +395,14 @@ class Profile extends Component {
                                             <label> <input type="radio" name="gender" checked={this.state.isFemale} disabled={this.state.isDisabled} />Female</label>
                                                     </div>
                                                 </div>
+                                                <div className="form-group row">
+                                            <div className="col-sm-8">
+                                                {divButton}
+                                                </div>
+                                            </div>
                                             </div>
 
-                                            <div className="form-group row">
-                                                {divButton}
-                                            </div>
+                                            
                                         </div>
                                     </form>
 

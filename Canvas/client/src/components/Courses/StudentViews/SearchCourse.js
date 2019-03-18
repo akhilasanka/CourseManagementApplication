@@ -3,6 +3,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
+import swal from 'sweetalert';
 
 class SearchCourse extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class SearchCourse extends Component {
         const formData = new FormData(event.target);
         let validInput = true;
         if(formData.get("courseID")=='' && formData.get("dept")=='' && formData.get("term")==null){
-            alert("Alteast one feild must be entered/selected");
+            swal("Alteast one feild must be entered/selected");
             validInput = false;
         }
         if(validInput == true){
@@ -81,7 +82,7 @@ class SearchCourse extends Component {
             })
             .then((responseData) => {
                 //console.log(responseData);
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
             }).catch(function (err) {
                 console.log(err)
             }); 

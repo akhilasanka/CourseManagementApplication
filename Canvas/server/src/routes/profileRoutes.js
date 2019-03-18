@@ -23,10 +23,10 @@ router.get('/profile', function (req, res) {
   console.log("Inside profile get request");
   console.log("Request params:");
   console.log(req.query);
-  let studentID = req.query.id;
+  let id = req.query.id;
   var queryResult = [];
   const getProfileData = async () => {
-    queryResult = await profileDao.checkIfUserExists(req.query.table, studentID);
+    queryResult = await profileDao.checkIfUserExists(req.query.table, id);
     if (queryResult[0]) {
       if (queryResult[0].email != null) {
         console.log("Data Found!");
@@ -147,6 +147,34 @@ router.get('/profile/img', function (req, res) {
   }
   try {
     getProfilepic();
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ responseMessage: 'Database not responding' });
+  }
+});
+
+
+router.put('/img', function (req, res) {
+  console.log("Inside put profile img");
+  console.log("Request body:");
+  console.log(req.body);
+  var queryResult = [];
+
+  let id = req.body.id;
+  let role = req.body.role;
+  const removeProfilePic = async () => {
+    queryResult = await profileDao.addProfilePic(role, id, null);
+    if (queryResult) {
+      console.log("pic removed");
+      res.status(200).json({ responseMessage: 'Image successfully removed!' });
+    }
+    else {
+      res.status(400).json({ responseMessage: 'Record not found' });
+    }
+  }
+  try {
+    removeProfilePic();
   }
   catch (err) {
     console.log(err);

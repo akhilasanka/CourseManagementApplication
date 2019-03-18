@@ -321,14 +321,13 @@ router.delete('/student/course/delete', function (req, res) {
 
 
 router.get('/student/home', function (req, res) {
-  console.log("Inside get student home");
-  console.log("Request params:");
-  console.log(req.query);
+ //console.log("Inside get student home");
+  //console.log("Request params:");
+  //console.log(req.query);
   let id = req.query.id;
   var queryResult = [];
   const getList = async () => {
     queryResult = await courseDao.getCoursesForAStudent(id);
-    console.log(queryResult);
     if (queryResult[0]) {
       if (queryResult[0].course_id != null) {
         console.log("Data Found!");

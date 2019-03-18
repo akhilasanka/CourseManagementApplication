@@ -3,7 +3,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
+import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseAssignment.css';
 import { Page, Document, pdfjs } from 'react-pdf';
@@ -11,14 +11,13 @@ import '../../cssFiles/pdfGrade.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-class GradeAssignment extends Component {
+class ViewAssignmentFile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             numPages: null,
             pageNumber: 1,
-            pdf: '',
-            marks: null
+            pdf: ''
         }
     }
 
@@ -39,51 +38,23 @@ class GradeAssignment extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                console.log("response",responseData);
+                console.log(responseData);
                 this.setState({
-                    pdf: "data:application/pdf;base64," + responseData.base64str,
-                    marks: responseData.marks
+                    pdf: "data:application/pdf;base64," + responseData.base64str
                 });
             }).catch(function (err) {
                 console.log(err)
             });
-
     }
     onDocumentLoadSuccess = ({ numPages }) => {
         this.setState({ numPages });
-    }
-
-    updateMarks = async(event) => {
-        event.preventDefault();
-        var submissionID = this.props.match.params.submissionID;
-        const formData = new FormData(event.target);
-        var marks = formData.get('marks');
-       await axios({
-            method: 'put',
-            url: 'http://localhost:3001/assignments/marks',     
-            params: { submissionID: submissionID, marks:marks},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        })
-            .then((response) => {
-                if (response.status >= 500) {
-                    throw new Error("Bad response from server");
-                }
-                console.log(response);
-                return response.data;
-            })
-            .then((responseData) => {
-                alert(responseData.responseMessage);
-                window.location.reload();
-            }).catch(function (err) {
-                console.log(err)
-            }); 
     }
 
     render() {
         const { pageNumber, numPages } = this.state;
         let redirectVar = null;
         let role = cookie.load('cookie1');
-        if (role != "faculty") {
+        if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }
         return (
@@ -121,25 +92,6 @@ class GradeAssignment extends Component {
                                             <p>Page {pageNumber} of {numPages}</p>
                                         </div>
                                     </div>
-                                    <div className="col-2">
-                                    <form onSubmit={this.updateMarks} method="put" style={{margin:"1.3em"}}>
-                                    <div className="form-group row">
-                                            <div className="col">
-                                                <div className="row">
-                                                    <label htmlFor="marks">Marks:&nbsp;</label>
-                                                <input type="number" className="form-control" name="marks" style={{width:"50%"}} value={this.state.marks} required />
-                                                <lable>/10</lable>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                        <div className="float-right">
-                                         <button type="submit" className="btn btn-primary btn-sm pull-left" style={{marginLeft:"80%"}}>Submit</button>
-                                        </div>
-                                        </div>
-
-                                    </form>
-                                        </div>
 
                                 </div>
                             </div>
@@ -153,4 +105,4 @@ class GradeAssignment extends Component {
 
 }
 
-export default GradeAssignment;
+export default ViewAssignmentFile;

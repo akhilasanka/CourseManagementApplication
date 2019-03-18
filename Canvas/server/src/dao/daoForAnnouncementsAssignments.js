@@ -104,11 +104,11 @@ module.exports = class announcementAssignmentDao {
         }
       }
       
-      async getAssignmentSubmissionFile(assignmentID,studentID,courseID){
+      async getAssignmentSubmissionFile(submissionID){
         let con = await dbConnection();
         try {
           await con.query("START TRANSACTION");
-          let result = await con.query('SELECT file_name FROM `assignment_submission` WHERE course_id = ? AND assignment_id = ? AND student_id = ?', [courseID,assignmentID,studentID]);
+          let result = await con.query('SELECT file_name, marks FROM `assignment_submission` WHERE id = ?', [submissionID]);
           await con.query("COMMIT");
           result = JSON.parse(JSON.stringify(result));
           return result;
@@ -137,5 +137,25 @@ module.exports = class announcementAssignmentDao {
           await con.destroy();
         }
       }
+
+      async updateMarks(submissionID,marks) {
+        let con = await dbConnection();
+        try {
+          await con.query("START TRANSACTION");
+          await con.query(`UPDATE assignment_submission SET marks = ? WHERE id = ?`, [
+              marks, submissionID
+            ]);
+          await con.query("COMMIT");
+          return true;
+        } catch (ex) {
+          await con.query("ROLLBACK");
+          console.log(ex);
+          throw ex;
+        } finally {
+          await con.release();
+          await con.destroy();
+        }
+      }
+    
 
 }

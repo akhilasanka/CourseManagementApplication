@@ -24,6 +24,7 @@ class StudentCourseHome extends Component {
         let filesurl = "/student/course/"+this.props.match.params.courseID+ "/files";
         let announcementsurl = "/student/course/"+this.props.match.params.courseID+ "/announcements";
         let peopleurl = "/student/course/"+this.props.match.params.courseID+ "/people";
+        let quizurl = "/student/course/"+this.props.match.params.courseID+ "/quiz";
         return (
             <div>
                 {redirectVar}
@@ -40,12 +41,12 @@ class StudentCourseHome extends Component {
                         <ul style={{listStyleType:"none", paddingLeft:"0px"}}>
                             <div className="row">
                             <Link to={coursehomeurl}>
-                            <button type="button" className="btn active btn-link float-left course-nav-btn">Assignments</button>
+                            <button type="button" className="btn btn-link float-left course-nav-btn">Assignments</button>
                             </Link>
                             </div>
                             <div className="row">
                             <Link to= {announcementsurl}>
-                            <button type="button" className="btn btn-link float-left course-nav-btn">Announcemts</button>
+                            <button type="button" className="btn active btn-link float-left course-nav-btn">Announcemts</button>
                             </Link>
                             </div>
                             <div className="row">
@@ -56,6 +57,11 @@ class StudentCourseHome extends Component {
                             <div className="row">
                             <Link to={filesurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                            </Link>
+                            </div>
+                            <div className="row">
+                            <Link to={quizurl}>
+                            <button type="button" className="btn  btn-link float-left course-nav-btn">Quiz</button>
                             </Link>
                             </div>
                         </ul>
