@@ -1,0 +1,32 @@
+.navigation {
+    text-align: center;
+}
+
+.main-nav .navbar-nav {
+    background-color: #005a8b;
+    width: 77px;
+}
+ 
+.main-nav .nav-link {
+    color: white;
+    background-color: #005a8b;
+    width:77px;
+}
+
+.main-nav .nav-item:active {
+    color: #005a8b;
+    background-color: white;
+}
+
+.main-nav .navigation a.active {
+    color: #005a8b;
+    background-color: white;
+}
+
+.main-nav .nav-link:hover, .nav-link:active {
+    color: white;
+    background-color: #004e8b;
+}
+
+
+

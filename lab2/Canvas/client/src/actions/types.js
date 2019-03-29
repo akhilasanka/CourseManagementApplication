@@ -1,0 +1,6 @@
+export const AUTH_LOGIN = "AUTH_LOGIN";
+export const SIGNUP = "SIGNUP";
+export const GET_PROFILE = "GET_PROFILE";
+export const REMOVE_PROFILE_PIC = "REMOVE_PROFILE_PIC";
+export const UPDATE_PROFILE = "UPDATE_PROFILE";
+export const UPLOAD_PROFILE_PIC = "UPLOAD_PROFILE_PIC";
