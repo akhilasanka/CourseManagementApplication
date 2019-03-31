@@ -338,7 +338,7 @@ router.get('/student/home' , function (req, res) {
       }
     }
     else {
-      res.status(400).json({ responseMessage: 'Record not found' });
+      res.status(200).json({ responseMessage: 'Record not found' });
     }
   }
   try {

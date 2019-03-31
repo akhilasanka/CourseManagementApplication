@@ -11,7 +11,7 @@ function KafkaRPC(){
     this.connection = conn;
     this.requests = {}; //hash to store request in wait for response
     this.response_queue = false; //placeholder for the future queue
-   // this.producer = this.connection.getProducer();
+    this.producer = this.connection.getProducer();
 }
 
 KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){

@@ -1,0 +1,8 @@
+#left-tabs-example-tab-first, #left-tabs-example-tab-second {
+    width: 60%;
+    margin-top: 10px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+    background-color: #005a8b;
+}

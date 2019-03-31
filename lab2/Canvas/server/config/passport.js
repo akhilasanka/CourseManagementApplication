@@ -18,6 +18,7 @@ passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
         }
         if (user) {
             delete user.password;
+            console.log("Authentication valid");
             return done(null, user);
         } else {
             return done(null, false);

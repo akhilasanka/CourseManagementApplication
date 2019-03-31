@@ -43,6 +43,7 @@ var announcementAssignmentRoutes = require('./src/routes/announcementAssignmentR
 var filesRoutes = require('./src/routes/filesRoutes');
 var StudentCourseRouteWithoutPooling = require('./src/routes/StudentCourseWithoutPooling');
 var quizRoutes = require('./src/routes/quizRoutes');
+var inboxRoutes = require('./src/routes/inboxRoutes');
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads/')));
 
@@ -89,6 +90,7 @@ app.use('/', courseRoutes);
 app.use('/', announcementAssignmentRoutes);
 app.use('/', filesRoutes);
 app.use('/',quizRoutes);
+app.use('/', inboxRoutes);
 //app.use('/', StudentCourseRouteWithoutPooling);
 
 // console.log that your server is up and running

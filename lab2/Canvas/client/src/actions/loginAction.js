@@ -18,6 +18,7 @@ export const authLogin = (data) => dispatch => {
             })
             .then((responseData) => {
                 if (responseData.validUser == true) {
+                    localStorage.setItem("token", responseData.token);
                     dispatch({
                         type: AUTH_LOGIN,
                         authFlag: true,

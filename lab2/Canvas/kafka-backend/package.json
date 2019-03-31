@@ -9,6 +9,7 @@
   "author": "Akhila Sanka",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "kafka-node": "^3.0.1",
     "mongoose": "^5.4.20"
   }
