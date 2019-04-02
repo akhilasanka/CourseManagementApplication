@@ -11,12 +11,13 @@ async (dispatch) => {
         imgName : null,
         img : null
     }
-
+    var token = localStorage.getItem("token");
     await axios({
         method: 'get',
         url: 'http://localhost:3001/profile',
         params: { "id": id, "table": role },
-        config: { headers: { 'Content-Type': 'application/json' } }
+        config: { headers: { 'Content-Type': 'application/json' } },
+        headers: {"Authorization" : `Bearer ${token}`}
     })
         .then((response) => {
             if (response.status >= 500) {
@@ -25,17 +26,20 @@ async (dispatch) => {
             return response.data;
         })
         .then(async (responseData) => {
-            //result.data1 = "data";
-            console.log('responseData: ', responseData)
-            result.data = responseData
-            //JSON.stringify(responseData);
-            if (responseData.img != null) {
+            console.log('responseData: ', responseData);
+            if(responseData.profile){
+                result.data = responseData.profile;
+            }
+            console.log("img",responseData.profile.img);
+            if (responseData.profile.img != '') {
+             console.log("Image present");
                 result.imgName = responseData.img;
               await axios({
                     method: 'get',
                     url: 'http://localhost:3001/profile/img',
                     params: { "id": id, "role": role },
-                    config: { headers: { 'Content-Type': 'application/json' } }
+                    config: { headers: { 'Content-Type': 'application/json' } },
+                    headers: {"Authorization" : `Bearer ${token}`}
                 })
                     .then((response) => {
                         if (response.status >= 500) {
@@ -46,7 +50,7 @@ async (dispatch) => {
                     })
                     .then((responseData) => {
                         console.log(responseData.base64str);
-                            result.img = "data:image/png;base64," + responseData.base64str;
+                        result.img = "data:image/png;base64," + responseData.base64str;
                     }).catch(function (err) {
                         console.log(err)
                     });
@@ -65,11 +69,13 @@ async (dispatch) => {
 export const removeProfilePic = (id, role) => 
 async (dispatch) => {
     console.log("inside remove profile pic action");
+    var token = localStorage.getItem("token");
     axios({
         method: 'put',
-        url: 'http://localhost:3001/img',
+        url: 'http://localhost:3001/remove/img',
         data: {id:id, role:role},
-        config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        config: { headers: { 'Content-Type': 'multipart/form-data' } },
+        headers: {"Authorization" : `Bearer ${token}`}
     })
         .then((response) => {
             if (response.status >= 500) {
@@ -92,11 +98,13 @@ async (dispatch) => {
 
 export const updateProfile = (data) => 
 async (dispatch) => {
+    var token = localStorage.getItem("token");
     await axios({
         method: 'post',
         url: 'http://localhost:3001/profile',
         data: data,
-        config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        config: { headers: { 'Content-Type': 'multipart/form-data' } },
+        headers: {"Authorization" : `Bearer ${token}`}
     })
         .then((response) => {
             if (response.status >= 500) {
@@ -119,12 +127,13 @@ async (dispatch) => {
 
 export const uploadProfilePic = (data) => 
 async (dispatch) => {
-
+    var token = localStorage.getItem("token");
     axios({
         method: 'post',
         url: 'http://localhost:3001/img/upload',
         data: data,
-        config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        config: { headers: { 'Content-Type': 'multipart/form-data' } },
+        headers: {"Authorization" : `Bearer ${token}`}
     })
         .then((response) => {
             if (response.status >= 500) {

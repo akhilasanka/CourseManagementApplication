@@ -36,10 +36,12 @@ class Profile extends Component {
         var id = cookie.load('cookie2');
         if (role) {
           await this.props.getProfile(id, role);
+          if(this.props.profile.data.name !== null){
           this.setState({
             name : this.props.profile.data.name,
             profileHeading : this.props.profile.data.name + "'s Profile"
           });
+        }
           if(this.props.profile.data.img !== null){
               console.log("has image");
             this.setState({ img : this.props.profile.img });
@@ -96,7 +98,8 @@ class Profile extends Component {
             gender = 'F';
         }
         let data = {
-            "id": id, "table": role, "name": formData.get('name'), "phoneNumber": formData.get('phoneNumber'),
+            "id": id, "role": role, "name": formData.get('name'), "phoneNumber": formData.get('phoneNumber'),
+            "aboutMe": formData.get('aboutMe'),"company": formData.get('company'),"city": formData.get('city'),
             "country": formData.get('country'), "school": formData.get('school'), "hometown": formData.get('hometown'),
             "languages": formData.get('languages'), "gender": gender, "img": this.state.imgName
         };
@@ -210,39 +213,57 @@ class Profile extends Component {
 
                                             <div className="col-7">
                                             <div className="form-group row">
-                                                    <label htmlFor="country" className="col-sm-2 col-form-label">Name:</label>
+                                                    <label htmlFor="name" className="col-sm-2 col-form-label">Name:</label>
                                                     <div className="col-sm-6">
                                                         <input type="text" className="form-control" name="name" defaultValue={this.props.profile.data.name} required readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
-                                                    <label htmlFor="country" className="col-sm-2 col-form-label">Phone number:</label>
+                                                    <label htmlFor="phoneNumber" className="col-sm-2 col-form-label">Phone number:</label>
                                                     <div className="col-sm-6">
                                                         <input type="text" className="form-control" name="phoneNumber" defaultValue={this.props.profile.data.phoneNumber} required readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
+                                                    <label htmlFor="aboutMe" className="col-sm-2 col-form-label">About Me:</label>
+                                                    <div className="col-sm-6">
+                                                    <textarea class="form-control" id="aboutMe" name="aboutMe" rows="3" defaultValue={this.props.profile.data.aboutMe} readOnly={this.state.readonly} ></textarea>
+                                                    </div>
+                                                </div>
+                                                <div className="form-group row">
+                                                    <label htmlFor="company" className="col-sm-2 col-form-label">Company:</label>
+                                                    <div className="col-sm-6">
+                                                        <input type="text" className="form-control" name="company" defaultValue={this.props.profile.data.company} readOnly={this.state.readonly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group row">
+                                                    <label htmlFor="city" className="col-sm-2 col-form-label">City:</label>
+                                                    <div className="col-sm-6">
+                                                        <input type="text" className="form-control" name="city" defaultValue={this.props.profile.data.city} readOnly={this.state.readonly} />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group row">
                                                     <label htmlFor="country" className="col-sm-2 col-form-label">Country:</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" className="form-control" name="country" defaultValue={this.props.profile.data.country} required readOnly={this.state.readonly} />
+                                                        <input type="text" className="form-control" name="country" defaultValue={this.props.profile.data.country}  readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label htmlFor="school" className="col-sm-2 col-form-label">School:</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" className="form-control" name="school" defaultValue={this.props.profile.data.school} required readOnly={this.state.readonly} />
+                                                        <input type="text" className="form-control" name="school" defaultValue={this.props.profile.data.school} readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label htmlFor="hometown" className="col-sm-2 col-form-label">Hometown:</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" className="form-control" name="hometown" defaultValue={this.props.profile.data.hometown} required readOnly={this.state.readonly} />
+                                                        <input type="text" className="form-control" name="hometown" defaultValue={this.props.profile.data.hometown} readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label htmlFor="languages" className="col-sm-2 col-form-label">Languages:</label>
                                                     <div className="col-sm-6">
-                                                        <input type="text" className="form-control" name="languages" defaultValue={this.props.profile.data.languages} required readOnly={this.state.readonly} />
+                                                        <input type="text" className="form-control" name="languages" defaultValue={this.props.profile.data.languages} readOnly={this.state.readonly} />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">

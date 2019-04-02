@@ -18,7 +18,7 @@ exports.inboxService = function inboxService(msg, callback) {
 
 function getEmailList(msg, callback) {
 
-    console.log("In inbox get email List. Msg: ", msg)
+    console.log("In inbox get email List. Msg: ", msg);
 
     Users.find({}, { "email": 1 }, function (err, results) {
         if (err) {

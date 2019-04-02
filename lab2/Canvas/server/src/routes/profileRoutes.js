@@ -1,11 +1,17 @@
 
+//imports
 const express = require('express');
 const router = express.Router();
-const ProfileDao = require("../dao/daoForLoginSignupRoutes");
-const profileDao = new ProfileDao();
 var fs = require('fs');
 const multer = require('multer');
+var passport = require('passport');
+var kafka = require('../kafka/client');
+const path = require('path');
 
+//middleware
+var requireAuth = passport.authenticate('jwt', { session: false });
+
+//multer storage
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, './uploads/profilepics');
@@ -19,168 +25,119 @@ const storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.get('/profile', function (req, res) {
-  console.log("Inside profile get request");
+router.get('/profile', requireAuth, function (req, res) {
+  console.log("Inside get profile");
   console.log("Request params:");
   console.log(req.query);
-  let id = req.query.id;
-  var queryResult = [];
-  const getProfileData = async () => {
-    queryResult = await profileDao.checkIfUserExists(req.query.table, id);
-    if (queryResult[0]) {
-      if (queryResult[0].email != null) {
-        console.log("Data Found!");
-        let obj = queryResult[0];
-        delete obj['password'];
-        Object.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
-        res.status(200).json(obj);
-      }
+
+  kafka.make_request('profile_topics',{"path":"get_profile","body":req.query}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
     }
-    else {
-      res.status(400).json({ responseMessage: 'Record not found' });
+    else if (result.status === 200)
+    {
+      console.log("Results found");
+      res.status(200).json({ profile: result.profile });
+    } else if (result.status === 204){
+      console.log("No results found");
+      res.status(200).json({ responseMessage: 'No results found!' });
     }
-  }
-  try {
-    getProfileData();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Database not responding' });
-  }
+  });
+
 });
 
-
-
-
-router.post('/profile', function (req, res) {
+router.post('/profile', requireAuth, function (req, res) {
   console.log("Inside profile put request");
   console.log("Request Body:");
   console.log(req.body);
-  let studentID = req.body.id;
-  let table = req.body.table;
-  var queryResult = [];
-  var inputData = {
-    "name": req.body.name,
-    "img": req.body.img,
-    "phonenumber": req.body.phoneNumber,
-    "country": req.body.country,
-    "school": req.body.school,
-    "hometown": req.body.hometown,
-    "languages": req.body.languages,
-    "gender": req.body.gender,
-  }
-  const getProfileData = async () => {
-    queryResult = await profileDao.updateUser(table, studentID, inputData);
-    if (queryResult) {
-      console.log("Data updated!");
-      res.status(200).json(queryResult);
-      res.cookie('cookie3',queryResult.name,{maxAge: 900000, httpOnly: false, path : '/'});
+  kafka.make_request('profile_topics',{"path":"update_profile", "body": req.body}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
     }
-    else {
-      res.status(400).json({ responseMessage: 'Record not found' });
+    else if (result.status === 200)
+    {
+      console.log("Updated Profile");
+      res.status(200).json({ responseMessage: 'Successfully Saved!' });
+    } else if (result.status === 205){
+      console.log("No results found to update");
+      res.status(400).json({ responseMessage: 'No results found to update' });
     }
-  }
-  try {
-    getProfileData();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Database not responding' });
-  }
+  });
 });
 
-
-router.post('/img/upload', upload.single('selectedFile'), function (req, res) {
+router.post('/img/upload', upload.single('selectedFile'), requireAuth, function (req, res) {
   console.log("Inside post profile img");
   console.log("Request body:");
   console.log(req.body);
   console.log("filename", req.file.filename);
   let filename = req.file.filename;
-  var queryResult = [];
-
-  let id = req.body.id;
-  let role = req.body.role;
-  const addProfilePic = async () => {
-    queryResult = await profileDao.addProfilePic(role, id, filename);
-    if (queryResult) {
-      console.log("pic added");
-      res.status(200).json({ responseMessage: 'File successfully uploaded!' });
+  kafka.make_request('profile_topics',{"path":"upload_profile_pic", "body": req.body, "filename": filename}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
     }
-    else {
-      res.status(400).json({ responseMessage: 'Record not found' });
+    else if (result.status === 200)
+    {
+      console.log("Updated Profile");
+      res.status(200).json({ responseMessage: 'Successfully Saved!' });
+    } else if (result.status === 205){
+      console.log("No results found to update");
+      res.status(400).json({ responseMessage: 'No results found to update' });
     }
-  }
-  try {
-    addProfilePic();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Database not responding' });
-  }
+  });
 });
 
-router.get('/profile/img', function (req, res) {
-  console.log("Inside profile get request");
+router.get('/profile/img', requireAuth, function (req, res) {
+  console.log("Inside get profile image");
   console.log("Request params:");
   console.log(req.query);
-  let id = req.query.id;
-  let role = req.query.role;
-  var queryResult = [];
-  let filename = '';
-  const getProfilepic = async () => {
-    queryResult = await profileDao.getProfilepic(role, id);
-    console.log(queryResult);
-    function base64_encode(file) {
-      var bitmap = fs.readFileSync(file);
-      return new Buffer(bitmap).toString('base64');
+
+  kafka.make_request('profile_topics',{"path":"get_profile_img","body":req.query}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
     }
-    if (queryResult[0]) {
-      filename = queryResult[0].img;
-      console.log(filename);
-      let filePath = "C:/Users/akhila/Documents/sjsu/sem1/273/lab2-wip/lab2/Canvas/server/uploads/profilepics/" + filename;
-        var base64str = base64_encode(filePath);
-        console.log("converted img to base64 and sent");
-        res.status(200).json({ base64str: base64str });
+    else if (result.status === 200)
+    {
+      function base64_encode(file) {
+        var bitmap = fs.readFileSync(file);
+        return new Buffer(bitmap).toString('base64');
+      }
+      console.log("Results found");
+      console.log(result.img);
+      var filePath = path.join(__dirname + '../../../uploads/profilepics',result.img);
+      console.log("file path:",filePath);
+      var base64str = base64_encode(filePath);
+      console.log("converted img to base64 and sent");
+      res.status(200).json({ base64str: base64str });
+    } else if (result.status === 204){
+      console.log("No results found");
+      res.status(204).json({ responseMessage: 'No image found!' });
     }
-    else {
-      res.status(400).json({ responseMessage: 'Record not found' });
-    }
-  }
-  try {
-    getProfilepic();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Database not responding' });
-  }
+  });
+
 });
 
-
-router.put('/img', function (req, res) {
-  console.log("Inside put profile img");
+router.put('/remove/img', requireAuth, function (req, res) {
+  console.log("Inside remove profile img");
   console.log("Request body:");
   console.log(req.body);
-  var queryResult = [];
-
-  let id = req.body.id;
-  let role = req.body.role;
-  const removeProfilePic = async () => {
-    queryResult = await profileDao.addProfilePic(role, id, null);
-    if (queryResult) {
-      console.log("pic removed");
-      res.status(200).json({ responseMessage: 'Image successfully removed!' });
+  kafka.make_request('profile_topics',{"path":"remove_profile_img", "body": req.body}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
     }
-    else {
-      res.status(400).json({ responseMessage: 'Record not found' });
+    else if (result.status === 200)
+    {
+      console.log("Removed profile pic");
+      res.status(200).json({ responseMessage: 'Successfully Removed!' });
+    } else if (result.status === 205){
+      console.log("No results found to update");
+      res.status(400).json({ responseMessage: 'No results found to update' });
     }
-  }
-  try {
-    removeProfilePic();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Database not responding' });
-  }
+});
 });
 
 module.exports = router;

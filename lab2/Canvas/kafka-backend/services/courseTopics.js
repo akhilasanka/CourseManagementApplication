@@ -321,7 +321,7 @@ function getStudentsForACourse(msg, callback) {
                 callback(null, { status: 205 });
             }
         }
-    })
+    });
 }
 
 function getWaitlistedStudentsForACourse(msg, callback) {

@@ -48,11 +48,13 @@ class PermissionCode extends Component {
         event.preventDefault();
         let studentID = this.state.waitlistedStudents[index].student_id;
         let courseID = this.state.waitlistedStudents[index].course_id;
+        var token = localStorage.getItem("token");
       await axios({
             method: 'put',
             url: 'http://localhost:3001/generateWaitlistCode',
             params: { "studentID": studentID, "courseID":courseID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {

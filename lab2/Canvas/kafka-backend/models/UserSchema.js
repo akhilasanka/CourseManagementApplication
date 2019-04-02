@@ -27,6 +27,18 @@ UserSchema = new Schema({
     type: Number,
     default: ''
   },
+  aboutMe: {
+    type: String,
+    default: ''
+  },
+  company: {
+    type: String,
+    default: ''
+  },
+  city: {
+    type: String,
+    default: ''
+  },
   country: {
     type: String,
     default: ''
