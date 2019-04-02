@@ -27,6 +27,7 @@ class Home extends Component {
     componentDidMount() {
         var role = cookie.load('cookie1');
         var id = cookie.load('cookie2');
+        var token = localStorage.getItem("token");
         let url = '';
         if (role === "faculty") {
             url = "http://localhost:3001/faculty/home";
@@ -38,14 +39,17 @@ class Home extends Component {
             method: 'get',
             url: url,
             params: { "id": id },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 //update the state with the response data
+                if(response.data.courses){
                 this.setState({
-                    courses: this.state.courses.concat(response.data)
+                    courses: this.state.courses.concat(response.data.courses)
                 });
                 console.log(this.state.courses);
+            }
             });
     }
 

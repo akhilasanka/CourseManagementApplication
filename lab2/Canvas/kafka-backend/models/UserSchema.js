@@ -47,6 +47,10 @@ UserSchema = new Schema({
     type: String,
     default: ''
   },
+  courses: {
+    type: Array,
+    default: []
+  }
 });
     
 module.exports = mongoose.model('Users', UserSchema); 

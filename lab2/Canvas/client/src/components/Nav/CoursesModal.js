@@ -36,10 +36,12 @@ class CourseModal extends Component {
         })
             .then((response) => {
                 //update the state with the response data
+                if(response.data.courses){
                 this.setState({
-                    courses: this.state.courses.concat(response.data)
+                    courses: this.state.courses.concat(response.data.courses)
                 });
                 console.log("courses", this.state.courses);
+            }
             });
     }
 
@@ -101,6 +103,7 @@ class CourseModal extends Component {
             </ul>
         }
         let coursesDiv = null;
+        if(this.state.courses.length>0){
         coursesDiv = this.state.courses.map(course => {
             return (
                 <div className="row" key={course.course_id} >
@@ -108,6 +111,7 @@ class CourseModal extends Component {
                 </div>
             )
         });
+    }
         return (
             <div className="modal" id="course" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
                 aria-hidden="false" aria-live="assertive" aria-relevant="additions" aria-atomic="false">

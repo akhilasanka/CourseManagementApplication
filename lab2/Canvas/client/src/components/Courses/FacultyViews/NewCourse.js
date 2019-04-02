@@ -3,6 +3,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
+import swal from 'sweetalert';
 
 class NewCourse extends Component {
     constructor(props) {
@@ -12,14 +13,17 @@ class NewCourse extends Component {
     createNewCourse = async (event) => {
         event.preventDefault();
         var facultyID = cookie.load('cookie2');
+		var facultyName = cookie.load('cookie3');
         const formData = new FormData(event.target);
+        var token = localStorage.getItem("token");
        await axios({
             method: 'post',
             url: 'http://localhost:3001/course/new',     
             data: { "id": formData.get("courseID"), "name": formData.get("name"), "dept": formData.get("dept"), 
                     "desc": formData.get("desc"), "room": formData.get("room"), "capacity": formData.get("capacity"), 
-                    "waitlistCapacity": formData.get("waitlistCapacity"), "courseTerm": formData.get("term"),"faculty_id" : facultyID },
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+                    "waitlistCapacity": formData.get("waitlistCapacity"), "courseTerm": formData.get("term"),"faculty_id" : facultyID , "faculty_name" : facultyName },
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -29,8 +33,8 @@ class NewCourse extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
-                window.location.reload();
+                swal(responseData.responseMessage);
+				document.getElementById("newCourseForm").reset();
             }).catch(function (err) {
                 console.log(err)
             }); 
@@ -57,7 +61,7 @@ class NewCourse extends Component {
                                     <div className="border-bottom row" style={{ marginBottom: "3%" }}>
                                         <h3 >New Course</h3>
                                     </div>
-                                    <form onSubmit={this.createNewCourse} method="post">
+                                    <form onSubmit={this.createNewCourse} id="newCourseForm" method="post">
                                     <div className="form-group row">
                                             <label htmlFor="courseID" className="col-sm-2 col-form-label">Course ID:</label>
                                             <div className="col-sm-5">
@@ -79,7 +83,7 @@ class NewCourse extends Component {
                                         <div className="form-group row">
                                                 <label htmlFor="desc" className="col-sm-2 col-form-label">Description:</label>
                                                 <div className="col-sm-5">
-                                                <textarea class="form-control" id="desc" rows="3"></textarea>
+                                                <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
                                                 </div>
                                         </div>
                                         <div className="form-group row">

@@ -26,6 +26,7 @@ class SearchCourse extends Component {
         event.preventDefault();
         const formData = new FormData(event.target);
         let validInput = true;
+        var token = localStorage.getItem("token");
         if(formData.get("courseID")=='' && formData.get("dept")=='' && formData.get("term")==null){
             swal("Alteast one feild must be entered/selected");
             validInput = false;
@@ -36,7 +37,8 @@ class SearchCourse extends Component {
             url: 'http://localhost:3001/course/search',     
             params: { "course_id": formData.get("courseID"), "dept": formData.get("dept"), 
                     "operation": formData.get("operation"), "term": formData.get("term")},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -45,8 +47,9 @@ class SearchCourse extends Component {
                 return response.data;
             })
             .then((responseData) => {
+                console.log("responseData", responseData);
                 if(responseData.dataFound === false){
-                    alert("No results found for given entry. Please try with different values.");
+                    swal("No results found for given entry. Please try with different values.");
                 }else{
                     this.setState({
                         searchResults : responseData,
@@ -67,11 +70,14 @@ class SearchCourse extends Component {
         if(seatsLeft>0){
             status = 'E';
         }
+        let studentName = cookie.load('cookie3');
+        var token = localStorage.getItem("token");
         await axios({
             method: 'post',
             url: 'http://localhost:3001/student/enroll',     
-            data: {courseID : courseID, studentID : studentID, status : status},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            data: {courseID : courseID, studentID : studentID, status : status, studentName: studentName},
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -196,7 +202,6 @@ class SearchCourse extends Component {
                                         {searchResults}
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>

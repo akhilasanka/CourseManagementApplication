@@ -3,6 +3,7 @@ var connection = new require('./kafka/Connection');
 //topics file
 var loginSignupTopics = require('./services/loginSignupTopics.js');
 var inboxTopics = require('./services/inboxTopics.js');
+var courseTopics = require('./services/courseTopics.js');
 
 // Set up Database connection
 var config = require('./config/settings');
@@ -44,6 +45,12 @@ function handleTopicRequest(topic_name, fname) {
                     return;
                 })
                 break;
+            case 'course_topics':
+                courseTopics.courseService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                })
+                break;
         }
     })
 };
@@ -71,3 +78,4 @@ function response(data, res, producer) {
 //second argument is a function that will handle this topic request
 handleTopicRequest("loginSignup_topics", loginSignupTopics);
 handleTopicRequest("inbox_topics",inboxTopics);
+handleTopicRequest("course_topics",courseTopics);

@@ -19,11 +19,13 @@ class ShowStudents extends Component {
     componentWillMount(){
         var id = this.props.match.params.courseID;
         console.log(id);
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/people',     
+            url: 'http://localhost:3001/course/students',     
             params: { "courseID": id },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data

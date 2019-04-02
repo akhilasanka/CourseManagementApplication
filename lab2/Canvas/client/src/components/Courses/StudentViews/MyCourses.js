@@ -16,26 +16,26 @@ class MyCourses extends Component {
         var id = cookie.load('cookie2');
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/course/details',     
+            url: 'http://localhost:3001/student/home',     
             params: { "id": id },
             config: { headers: { 'Content-Type': 'application/json' } }
         })
                 .then((response) => {
                 //update the state with the response data
                 this.setState({
-                    courseDetails : this.state.courseDetails.concat(response.data) 
+                    courseDetails : this.state.courseDetails.concat(response.data.courses) 
                 });
                 console.log("details data",this.state.courseDetails);
             });
     }
 
-    drop = async (event,courseID) => {
+    drop = async (event,courseID,status) => {
         event.preventDefault();
         let studentID = cookie.load('cookie2');
         await axios({
             method: 'delete',
             url: 'http://localhost:3001/student/course/delete',     
-            params: {courseID : courseID, studentID : studentID},
+            params: {courseID : courseID, studentID : studentID, status: status},
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
             .then((response) => {
@@ -47,7 +47,7 @@ class MyCourses extends Component {
             })
             .then((responseData) => {
                 //console.log(responseData);
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -70,23 +70,16 @@ class MyCourses extends Component {
             }
             return (
                 <tr key={record.index} className="course-list">
-                    <td>{record.courseID}</td>
-                    <td>{record.courseName}</td>
+                    <td>{record.course_id}</td>
+                    <td>{record.course_name}</td>
                     <td>{record.dept}</td>
-                    <td>{record.courseTerm}</td>
+                    <td>{record.term}</td>
                     <td>{record.status}</td>
                     <td>{record.grade}</td>
-                    <td>{record.room}</td>
-                    <td>{record.facultyName}</td>
-                    <td>{record.facultyEmail}</td>
+                    <td>{record.faculty_name}</td>
                     
                     <td>
-                    <button type="button" className="btn btn-primary" onClick={(e)=>this.drop(e,record.courseID)}>Drop</button> 
-                    </td>
-                    <td >
-                        <div style={getStyle(record.status)}>
-                    <button type="button" className="btn btn-primary" onClick={(e)=>this.enroll(e)}>Apply Code</button>
-                    </div>
+                    <button type="button" className="btn btn-primary" onClick={(e)=>this.drop(e,record.course_id, record.status)}>Drop</button> 
                     </td>
                 </tr>
             )
@@ -106,8 +99,13 @@ class MyCourses extends Component {
                                 <div className="border-bottom row" style={{ marginBottom: "3%", marginTop: "2%" }}>
                                     <h3>My Courses</h3>
                                 </div>
+                                {this.state.courseDetails.length>0
+                                                        ?
+                                                        (
+                                                            <div>
                                 <small>*W indicates waitlist, E indicates enrolled</small>
                                 <table className="table table-striped table-bordered course-table">
+                                
                                     <thead>
                                         <tr>
                                             <th>Course ID</th>
@@ -116,18 +114,23 @@ class MyCourses extends Component {
                                             <th>Term</th>
                                             <th>Status</th>
                                             <th>Grade</th>
-                                            <th>Class Room</th>
                                             <th>Faculty Name</th>
-                                            <th>Faculty Email</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Drop Course</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {courseDetailsDiv}
                                     </tbody>
                                 </table>
-
+                                </div>
+                                )
+                                :
+                                (
+                                    <div class="alert alert-info" role="alert">
+                                                                Please register to courses to view details
+                                    </div>
+                                )
+                                }
                             </div>
                         </div>
                     </div>

@@ -4,7 +4,6 @@ import Login from './LoginAndSignup/Login';
 import Signup from './LoginAndSignup/Signup';
 import Home from './Home/Home';
 import Profile from './Profile/Profile';
-import Profile2 from './Profile/Profile2';
 import NewCourse from './Courses/FacultyViews/NewCourse';
 import PermissionCode from './Courses/FacultyViews/PermissionCode';
 import StudentCourseHome from './Courses/StudentViews/StudentCourseHome';
