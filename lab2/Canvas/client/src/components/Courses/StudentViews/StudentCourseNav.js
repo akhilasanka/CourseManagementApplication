@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseNav.css';
 import {Nav, Tab, Row, Col} from 'react-bootstrap';
 
 class StudentCourseNav extends Component {
@@ -15,25 +14,17 @@ class StudentCourseNav extends Component {
    
 
     render() {
-        let courseID = null;
-        let redirectVar = null;
-        let role = cookie.load('cookie1');
-        if (!role) {
-            redirectVar = <Redirect to="/login" />;
-        }
-        let url = window.location.href;
-        let coursehomeurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/assignments";
-        let filesurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/files";
-        let announcementsurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/announcements";
-        let peopleurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/people";
-        let quizurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/quiz";
+        let assignmenturl = "/student/course/"+this.props.match.params.courseID+ "/assignments";
+        let filesurl = "/student/course/"+this.props.match.params.courseID+ "/files";
+        let announcementsurl = "/student/course/"+this.props.match.params.courseID+ "/announcements";
+        let peopleurl = "/student/course/"+this.props.match.params.courseID+ "/people";
+        let quizurl = "/student/course/"+this.props.match.params.courseID+ "/quiz";
+        let gradesurl = "/student/course/"+this.props.match.params.courseID+ "/grade";
         return (
             <div>
-                {redirectVar}
-                <div className='rowC' style={{ display: "flex", flexDirection: "row" }}>
                         <ul style={{listStyleType:"none", paddingLeft:"0px"}}>
                             <div className="row">
-                            <Link to={coursehomeurl}>
+                            <Link to={assignmenturl}>
                             <button type="button" className="btn  btn-link float-left course-nav-btn ">Assignments</button>
                             </Link>
                             </div>
@@ -56,10 +47,12 @@ class StudentCourseNav extends Component {
                             <Link to={quizurl}>
                             <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
                             </Link>
+                            <Link to={gradesurl}>
+                            <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                            </Link>
                             </div>
                         </ul>
                         
-                    </div>
                     </div>
         )
     }

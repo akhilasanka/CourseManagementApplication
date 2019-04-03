@@ -5,6 +5,7 @@ var loginSignupTopics = require('./services/loginSignupTopics.js');
 var inboxTopics = require('./services/inboxTopics.js');
 var courseTopics = require('./services/courseTopics.js');
 var profileTopics = require('./services/profileTopics.js');
+var fileTopics = require('./services/fileTopics');
 
 // Set up Database connection
 var config = require('./config/settings');
@@ -58,6 +59,12 @@ function handleTopicRequest(topic_name, fname) {
                     return;
                 })
                 break;
+            case 'file_topics':
+                fileTopics.fileService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                })
+                break;
         }
     })
 };
@@ -87,3 +94,4 @@ handleTopicRequest("loginSignup_topics", loginSignupTopics);
 handleTopicRequest("inbox_topics", inboxTopics);
 handleTopicRequest("course_topics", courseTopics);
 handleTopicRequest("profile_topics", profileTopics);
+handleTopicRequest("file_topics", fileTopics);

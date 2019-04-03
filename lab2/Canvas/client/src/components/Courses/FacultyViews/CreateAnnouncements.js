@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseAssignment.css';
+import '../../cssFiles/activeTab.css';
 
 
 class CreateAnnouncements extends Component {

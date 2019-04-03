@@ -5,7 +5,6 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseAssignment.css';
 import swal from 'sweetalert';
 
 

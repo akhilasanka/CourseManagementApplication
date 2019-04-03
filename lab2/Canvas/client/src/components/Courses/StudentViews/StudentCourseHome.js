@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseNav.css';
 import {Nav, Tab, Row, Col} from 'react-bootstrap';
 
 class StudentCourseHome extends Component {

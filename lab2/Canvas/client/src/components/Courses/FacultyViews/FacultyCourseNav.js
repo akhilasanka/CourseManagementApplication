@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseNav.css';
+import '../../cssFiles/activeTab.css';
 import {Nav, Row, Col} from 'react-bootstrap';
 var classNames = require('classnames');
 

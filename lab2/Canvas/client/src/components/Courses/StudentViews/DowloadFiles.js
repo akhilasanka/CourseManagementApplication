@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseAssignment.css';
+import '../../cssFiles/activeTab.css';
 import download from 'downloadjs';
 
 
@@ -20,11 +20,13 @@ class DownloadFiles extends Component {
 
     componentWillMount() {
         var courseID = this.props.match.params.courseID;
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/files',
             params: { "courseID": courseID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: { "Authorization": `Bearer ${token}` }
         })
             .then((response) => {
                 //update the state with the response data
@@ -37,11 +39,13 @@ class DownloadFiles extends Component {
 
     downloadFile = (event, file) => {
         event.preventDefault();
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/file/base64str',
             params: { "fileName": file },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: { "Authorization": `Bearer ${token}` }
         })
             .then((response) => {
                 return response.data.base64str;
@@ -52,11 +56,11 @@ class DownloadFiles extends Component {
                 let arr = null;
                 if (this.state.base64str != null) {
                     arr = _base64ToArrayBuffer(this.state.base64str);
-                    download(arr,file,"text/plain");
+                    download(arr, file, "text/plain");
                 }
             }).catch(function (err) {
                 console.log(err)
-            }); 
+            });
 
         function _base64ToArrayBuffer(base64) {
             var binary_string = window.atob(base64);
@@ -85,6 +89,12 @@ class DownloadFiles extends Component {
                 </tr>
             )
         });
+        let assignmenturl = "/student/course/" + this.props.match.params.courseID + "/assignments";
+        let filesurl = "/student/course/" + this.props.match.params.courseID + "/files";
+        let announcementsurl = "/student/course/" + this.props.match.params.courseID + "/announcements";
+        let peopleurl = "/student/course/" + this.props.match.params.courseID + "/people";
+        let quizurl = "/student/course/" + this.props.match.params.courseID + "/quiz";
+        let gradesurl = "/student/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -101,20 +111,62 @@ class DownloadFiles extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2">
-                                        <CourseNav />
+                                        <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn ">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcemts</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn active-tab">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
-                                        <small>*click on link to download</small>
-                                        <table className="table table-striped table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>File</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fileDetailsDiv}
-                                            </tbody>
-                                        </table>
+                                        {this.state.fileDetails.length > 0
+                                            ?
+                                            <div>
+                                                <small>*click on link to download</small>
+                                                <table className="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>File</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {fileDetailsDiv}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            :
+                                            <div>
+                                                <div class="alert alert-info" role="alert">
+                                                    No files to display
+                                                            </div>
+                                            </div>
+                                        }
                                     </div>
 
                                 </div>

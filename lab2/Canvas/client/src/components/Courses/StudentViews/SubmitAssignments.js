@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseAssignment.css';
+import '../../cssFiles/activeTab.css';
 
 class SubmitAssignments extends Component {
     constructor(props) {

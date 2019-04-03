@@ -5,7 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/courseAssignment.css';
+import '../../cssFiles/courseNav.css';
 
 
 class ShowPeople extends Component {
@@ -52,6 +52,12 @@ class ShowPeople extends Component {
                 </tr>
             )
             });
+        let assignmenturl = "/student/course/"+this.props.match.params.courseID+ "/assignments";
+        let filesurl = "/student/course/"+this.props.match.params.courseID+ "/files";
+        let announcementsurl = "/student/course/"+this.props.match.params.courseID+ "/announcements";
+        let peopleurl = "/student/course/"+this.props.match.params.courseID+ "/people";
+        let quizurl = "/student/course/"+this.props.match.params.courseID+ "/quiz";
+        let gradesurl = "/student/course/"+this.props.match.params.courseID+ "/grade";
         return (
             <div>
                 {redirectVar}

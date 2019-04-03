@@ -66,10 +66,10 @@ class CourseModal extends Component {
 
     openCourse = (event, courseID) => {
         if (cookie.load('cookie1') == "faculty") {
-            window.location = "/faculty/course/" + courseID;
+            window.location = "/faculty/course/" + courseID + "/files";
         }
         if (cookie.load('cookie1') == "student") {
-            window.location = "/student/course/" + courseID;
+            window.location = "/student/course/" + courseID + "/files";
         }
     }
 
