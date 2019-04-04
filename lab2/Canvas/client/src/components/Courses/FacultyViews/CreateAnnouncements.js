@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
+import swal from 'sweetalert';
 
 
 class CreateAnnouncements extends Component {
@@ -20,11 +21,13 @@ class CreateAnnouncements extends Component {
         var id = this.props.match.params.courseID;
         console.log(id);
         var facultyID = cookie.load('cookie2');
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/faculty/announcements',     
+            url: 'http://localhost:3001/announcements',     
             params: { "courseID": id , "facultyID" : facultyID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -40,11 +43,13 @@ class CreateAnnouncements extends Component {
         var id = this.props.match.params.courseID;
         console.log(this.props.match.params);
         const formData = new FormData(event.target);
+        var token = localStorage.getItem("token");
        await axios({
             method: 'post',
             url: 'http://localhost:3001/announcements',     
             data: { "courseID": id, "title": formData.get("title"), "announcement": formData.get("desc")},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -54,7 +59,7 @@ class CreateAnnouncements extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -68,13 +73,22 @@ class CreateAnnouncements extends Component {
             redirectVar = <Redirect to="/login" />;
         }
         let announcementDetailsDiv = this.state.announcementDetails.map((record,index) => {
+            let str = record.timestamp;
+            let time = str.substring(0, str.indexOf('('));
             return (
-                <tr key={record.id}>
+                <tr key={record._id}>
                     <td>{record.title}</td>
                     <td>{record.desc}</td>
+                    <td>{time}</td>
                 </tr>
             )
             });
+            let assignmenturl = "/faculty/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/faculty/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/faculty/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -91,7 +105,38 @@ class CreateAnnouncements extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn active-tab">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                     <form onSubmit={this.createNewAnnouncement} method="post">
@@ -107,20 +152,22 @@ class CreateAnnouncements extends Component {
                                                 <textarea className="form-control" id="desc" name="desc" rows="3"></textarea>
                                                 </div>
                                         </div>
-                                        <div className="form-group row border-bottom">
+                                        <div className="form-group row">
                                         <div className="col-sm-5">
                                          <button type="submit" className="btn btn-primary pull-right" style={{marginBottom:"5%"}}>Create Announcement</button>
                                         </div>
                                         </div>
 
                                     </form>
-                                    <div>
+                                    {this.state.announcementDetails.length > 0 &&
+                                    <div className="border-top">
                                             <h4 style={{padding:"0.5em"}}>Published Announcements</h4>
                                             <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Title</th>
                                             <th>Announcement</th>
+                                            <th>Date/Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -128,6 +175,7 @@ class CreateAnnouncements extends Component {
                                     </tbody>
                                 </table>
                                         </div>
+                                    }
                                         </div>
                                         
                                 </div>

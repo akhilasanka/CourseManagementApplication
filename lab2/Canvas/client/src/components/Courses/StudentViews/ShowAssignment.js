@@ -16,11 +16,13 @@ class ShowAssignments extends Component {
 
     componentWillMount(){
         var id = this.props.match.params.courseID;
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/myassignments',     
+            url: 'http://localhost:3001/assignments',     
             params: { "courseID": id },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -46,12 +48,18 @@ class ShowAssignments extends Component {
         }
         let assignmentsDiv = this.state.assignmentDetails.map((record,index) => {
             return (
-                <tr key={record.id}>
-                    <td><a href="" onClick={(event)=>this.openSubmissions(event,record.id)}>{record.title}</a></td>
+                <tr key={record._id}>
+                    <td><a href="" onClick={(event)=>this.openSubmissions(event,record._id)}>{record.title}</a></td>
                     <td>{record.desc}</td>
                 </tr>
             )
             });
+            let assignmenturl = "/student/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/student/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/student/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/student/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/student/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/student/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -68,10 +76,41 @@ class ShowAssignments extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn active-tab">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
-                                  
+                                    {this.state.assignmentDetails.length > 0 ?
                                     <div>
                                             <table className="table table-striped table-bordered">
                                     <thead>
@@ -85,6 +124,10 @@ class ShowAssignments extends Component {
                                     </tbody>
                                 </table>
                                         </div>
+                                        :
+                                        <div class="alert alert-info" role="alert">
+                                            No assignments to display
+                                        </div>}
                                         </div>
                                         
                                 </div>

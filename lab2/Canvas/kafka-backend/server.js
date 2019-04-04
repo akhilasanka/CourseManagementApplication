@@ -6,6 +6,8 @@ var inboxTopics = require('./services/inboxTopics.js');
 var courseTopics = require('./services/courseTopics.js');
 var profileTopics = require('./services/profileTopics.js');
 var fileTopics = require('./services/fileTopics');
+var assignmentTopics = require('./services/assignmentTopics');
+var announcementTopics = require('./services/announcementTopics');
 
 // Set up Database connection
 var config = require('./config/settings');
@@ -39,31 +41,43 @@ function handleTopicRequest(topic_name, fname) {
                 loginSignupTopics.loginSignupService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
-                })
+                });
                 break;
             case 'inbox_topics':
                 inboxTopics.inboxService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
-                })
+                });
                 break;
             case 'course_topics':
                 courseTopics.courseService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
-                })
+                });
                 break;
             case 'profile_topics':
                 profileTopics.profileService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
-                })
+                });
                 break;
             case 'file_topics':
                 fileTopics.fileService(data.data, function (err, res) {
                     response(data, res, producer);
                     return;
-                })
+                });
+                break;
+            case 'assignment_topics':
+                assignmentTopics.assignmentService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                });
+                break;
+            case 'announcement_topics':
+                announcementTopics.announcementService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                });
                 break;
         }
     })
@@ -95,3 +109,5 @@ handleTopicRequest("inbox_topics", inboxTopics);
 handleTopicRequest("course_topics", courseTopics);
 handleTopicRequest("profile_topics", profileTopics);
 handleTopicRequest("file_topics", fileTopics);
+handleTopicRequest("assignment_topics", assignmentTopics);
+handleTopicRequest("announcement_topics",announcementTopics);

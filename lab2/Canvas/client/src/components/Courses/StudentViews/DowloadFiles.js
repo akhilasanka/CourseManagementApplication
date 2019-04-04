@@ -119,7 +119,7 @@ class DownloadFiles extends Component {
                                             </div>
                                             <div className="row">
                                                 <Link to={announcementsurl}>
-                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcemts</button>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
                                                 </Link>
                                             </div>
                                             <div className="row">

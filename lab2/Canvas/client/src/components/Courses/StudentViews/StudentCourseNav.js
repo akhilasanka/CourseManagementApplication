@@ -14,12 +14,13 @@ class StudentCourseNav extends Component {
    
 
     render() {
-        let assignmenturl = "/student/course/"+this.props.match.params.courseID+ "/assignments";
-        let filesurl = "/student/course/"+this.props.match.params.courseID+ "/files";
-        let announcementsurl = "/student/course/"+this.props.match.params.courseID+ "/announcements";
-        let peopleurl = "/student/course/"+this.props.match.params.courseID+ "/people";
-        let quizurl = "/student/course/"+this.props.match.params.courseID+ "/quiz";
-        let gradesurl = "/student/course/"+this.props.match.params.courseID+ "/grade";
+        let url = window.location.href;
+        let assignmenturl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/assignments";
+        let filesurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/files";
+        let announcementsurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/announcements";
+        let peopleurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/people";
+        let quizurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/quiz";
+        let gradesurl = "/student/course/"+url.substr(url.lastIndexOf('/') + 1) + "/grade";
         return (
             <div>
                         <ul style={{listStyleType:"none", paddingLeft:"0px"}}>

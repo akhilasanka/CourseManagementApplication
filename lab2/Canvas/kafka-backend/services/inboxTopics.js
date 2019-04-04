@@ -35,7 +35,7 @@ function getEmailList(msg, callback) {
                 callback(null, { status: 401 });
             }
         }
-    })
+    });
 }
 
 function saveMessage(msg, callback) {

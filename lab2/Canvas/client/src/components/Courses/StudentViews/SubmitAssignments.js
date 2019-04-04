@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
+import swal from 'sweetalert';
 
 class SubmitAssignments extends Component {
     constructor(props) {
@@ -20,11 +21,13 @@ class SubmitAssignments extends Component {
         var courseID = this.props.match.params.courseID;
         var studentID = cookie.load('cookie2');
         var assignmentID = this.props.match.params.assignmentID;
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/myassignmentSubmissions',     
+            url: 'http://localhost:3001/student/assignmentSubmissions',     
             params: { "courseID": courseID , "studentID" : studentID, "assignmentID": assignmentID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -48,7 +51,7 @@ class SubmitAssignments extends Component {
     openSubmissions = (event,record) =>{
         event.preventDefault();
      let url = window.location.href;
-     window.location = url + "/assignmentFile/"+record.id;
+     window.location = url + "/assignmentFile/"+record._id;
     }
 
     submitAssignment = async (event) => {
@@ -67,11 +70,13 @@ class SubmitAssignments extends Component {
         formData.append('selectedFile', this.state.selectedFile);
 
         console.log(this.props.match.params);
+        var token = localStorage.getItem("token");
         await axios({
             method: 'post',
             url: 'http://localhost:3001/assignments/upload',     
             data: formData,
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -81,7 +86,7 @@ class SubmitAssignments extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -95,13 +100,22 @@ class SubmitAssignments extends Component {
             redirectVar = <Redirect to="/login" />;
         }
         let submissionDiv = this.state.assignmentDetails.map((record,index) => {
+            let str = record.timestamp;
+            let time = str.substring(0, str.indexOf('('));
             return (
-                <tr key={record.id}>
+                <tr key={record._id}>
                     <td><a href="" onClick={(event)=>this.openSubmissions(event,record)}>{record.file_name}</a></td>
                     <td>{record.comments}</td>
+                    <td>{time}</td>
                 </tr>
             )
             });
+            let assignmenturl = "/student/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/student/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/student/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/student/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/student/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/student/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -118,7 +132,38 @@ class SubmitAssignments extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2">
-                                        <CourseNav />
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn active-tab">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                         <form onSubmit={this.submitAssignment} encType="multipart/form-data" method="post">
@@ -134,20 +179,22 @@ class SubmitAssignments extends Component {
                                                     <textarea className="form-control" id="desc" name="desc" rows="3"></textarea>
                                                 </div>
                                             </div>
-                                            <div className="form-group row border-bottom">
+                                            <div className="form-group row">
                                                 <div className="col-sm-5">
                                                     <button type="submit" className="btn btn-primary pull-right" style={{ marginBottom: "5%" }}>Submit</button>
                                                 </div>
                                             </div>
 
                                         </form>
-                                        <div>
+                                        {this.state.assignmentDetails.length > 0 &&
+                                        <div className="border-top">
                                             <h4 style={{ padding: "0.5em" }}>Past Submissions</h4>
                                             <table className="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>File</th>
                                                         <th>Comments</th>
+                                                        <th>Time of submission</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -155,6 +202,7 @@ class SubmitAssignments extends Component {
                                                 </tbody>
                                             </table>
                                         </div>
+                                        }
                                     </div>
 
                                 </div>

@@ -21,11 +21,13 @@ class CourseAssignmentSubmissions extends Component {
         var id = this.props.match.params.assignmentID;
         var courseID = this.props.match.params.courseID;
         console.log("id:",id);
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/assignmentsubmissions',     
             params: { "assignmentID": id , "courseID":courseID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -39,16 +41,18 @@ class CourseAssignmentSubmissions extends Component {
     openSubmissions = (event,record) =>{
         event.preventDefault();
      let url = window.location.href;
-     window.location = url + "/student/" + record.student_id+"/assignmentFile/"+record.id;
+     window.location = url + "/student/" + record.student_id+"/assignmentFile/"+record._id;
     }
 
     downloadFile = (event, file) => {
         event.preventDefault();
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/file/base64str',
+            url: 'http://localhost:3001/assignmentsubmission/file/base64str',
             params: { "fileName": file, "isAssignment" : true },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 return response.data.base64str;
@@ -83,16 +87,25 @@ class CourseAssignmentSubmissions extends Component {
             redirectVar = <Redirect to="/login" />;
         }
         let submissionDiv = this.state.submissionDetails.map((record,index) => {
+            let str = record.timestamp;
+            let time = str.substring(0, str.indexOf('('));
             return (
-                <tr key={record.id}>
+                <tr key={record._id}>
                     
                     <td>{record.student_id}</td>
                     <td><a href="" onClick={(event)=>this.openSubmissions(event,record)}>{record.file_name}</a></td>
+                    <td>{time}</td>
                     <td>{record.marks}</td>
                     <td><button type="button" className="btn btn-primary" onClick={(e)=>this.downloadFile(e,record.file_name)}>Download</button> </td>
                 </tr>
             )
             });
+            let assignmenturl = "/faculty/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/faculty/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/faculty/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -109,7 +122,38 @@ class CourseAssignmentSubmissions extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn active-tab">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                     <div>
@@ -118,6 +162,7 @@ class CourseAssignmentSubmissions extends Component {
                                         <tr>
                                             <th>Student ID</th>
                                             <th>File</th>
+                                            <th>Time of Submission</th>
                                             <th>Marks</th>
                                             <th>Download File</th>
                                         </tr>

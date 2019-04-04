@@ -18,11 +18,13 @@ class ShowAnnouncements extends Component {
     componentWillMount(){
         var id = this.props.match.params.courseID;
         console.log(id);
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/announcements',     
             params: { "courseID": id },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -47,6 +49,12 @@ class ShowAnnouncements extends Component {
                 </tr>
             )
             });
+            let assignmenturl = "/student/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/student/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/student/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/student/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/student/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/student/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -63,7 +71,38 @@ class ShowAnnouncements extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav/>
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn active-tab">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                     <div>

@@ -20,7 +20,7 @@ function userSignup(msg, callback) {
         if (err) {
             console.log(err);
             console.log("unable to read the database");
-            callback(err, "Dtaabase Error");
+            callback(err, "Database Error");
         } else {
             if (rows) {
                 console.log("User already exists");

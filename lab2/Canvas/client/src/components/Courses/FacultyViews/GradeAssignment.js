@@ -8,6 +8,7 @@ import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import { Page, Document, pdfjs } from 'react-pdf';
 import '../../cssFiles/pdfGrade.css';
+import swal from 'sweetalert';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -17,19 +18,21 @@ class GradeAssignment extends Component {
         this.state = {
             numPages: null,
             pageNumber: 1,
-            pdf: '',
-            marks: null
+            pdf: ''
         }
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentWillMount() {
         var submissionID = this.props.match.params.submissionID;
         console.log(this.props.match.params);
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/assignmentsubmissionfile',
+            url: 'http://localhost:3001/assignmentsubmission/details',
             params: { submissionID: submissionID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -53,16 +56,35 @@ class GradeAssignment extends Component {
         this.setState({ numPages });
     }
 
+    nextPage = () => {
+        if(this.state.pageNumber < this.state.numPages){
+            this.setState({ pageNumber: this.state.pageNumber+1 });
+        }
+    }
+
+    previousPage = () => {
+        if(this.state.pageNumber > 1){
+            this.setState({ pageNumber: this.state.pageNumber-1 });
+        }
+    }
+
+    handleChange(event) {
+        this.setState({marks: event.target.value});
+      }
+
     updateMarks = async(event) => {
         event.preventDefault();
-        var submissionID = this.props.match.params.submissionID;
+        var assignmentID = this.props.match.params.assignmentID;
+        var studentID = this.props.match.params.studentID;
         const formData = new FormData(event.target);
         var marks = formData.get('marks');
+        var token = localStorage.getItem("token");
        await axios({
             method: 'put',
-            url: 'http://localhost:3001/assignments/marks',     
-            params: { submissionID: submissionID, marks:marks},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            url: 'http://localhost:3001/assignmentsubmission/marks',     
+            params: { assignmentID: assignmentID, studentID: studentID, marks:marks},
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -72,8 +94,8 @@ class GradeAssignment extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
-                window.location.reload();
+                swal(responseData.responseMessage);
+                //window.location.reload();
             }).catch(function (err) {
                 console.log(err)
             }); 
@@ -86,6 +108,12 @@ class GradeAssignment extends Component {
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
+        let assignmenturl = "/faculty/course/" + this.props.match.params.courseID + "/assignments";
+        let filesurl = "/faculty/course/" + this.props.match.params.courseID + "/files";
+        let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
+        let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
+        let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
+        let gradesurl = "/faculty/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -102,7 +130,38 @@ class GradeAssignment extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2">
-                                        <CourseNav />
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn active-tab">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-7">
                                         <div className="row">
@@ -127,8 +186,8 @@ class GradeAssignment extends Component {
                                             <div className="col">
                                                 <div className="row">
                                                     <label htmlFor="marks">Marks:&nbsp;</label>
-                                                <input type="number" className="form-control" name="marks" style={{width:"50%"}} value={this.state.marks} required />
-                                                <lable>/10</lable>
+                                                <input type="number" className="form-control" name="marks" style={{width:"50%"}} value={this.state.marks} onChange={this.handleChange} required />
+                                                <label>/10</label>
                                                 </div>
                                             </div>
                                         </div>

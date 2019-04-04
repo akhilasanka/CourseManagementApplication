@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
+import swal from 'sweetalert';
 
 
 class CreateAssignments extends Component {
@@ -19,12 +20,14 @@ class CreateAssignments extends Component {
     componentWillMount(){
         var id = this.props.match.params.courseID;
         console.log(id);
-        var facultyID = cookie.load('cookie2');
+        //var facultyID = cookie.load('cookie2');
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/assignments',     
-            params: { "courseID": id , "facultyID" : facultyID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            params: { "courseID": id },
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -39,14 +42,15 @@ class CreateAssignments extends Component {
         event.preventDefault();
         var id = this.props.match.params.courseID;
         console.log(this.props.match.params);
-        //console.log("id",id);
-        var facultyID = cookie.load('cookie2');
+        //var facultyID = cookie.load('cookie2');
         const formData = new FormData(event.target);
+        var token = localStorage.getItem("token");
        await axios({
             method: 'post',
             url: 'http://localhost:3001/assignments',     
             data: { "courseID": id, "title": formData.get("title"), "desc": formData.get("desc")},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -56,7 +60,7 @@ class CreateAssignments extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -77,12 +81,18 @@ class CreateAssignments extends Component {
         }
         let assignmentsDiv = this.state.assignmentDetails.map((record,index) => {
             return (
-                <tr key={record.id}>
-                    <td><a href="" onClick={(event)=>this.openSubmissions(event,record.id)}>{record.title}</a></td>
+                <tr key={record._id}>
+                    <td><a href="" onClick={(event)=>this.openSubmissions(event,record._id)}>{record.title}</a></td>
                     <td>{record.desc}</td>
                 </tr>
             )
             });
+            let assignmenturl = "/faculty/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/faculty/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
+            let gradesurl = "/faculty/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -99,7 +109,38 @@ class CreateAssignments extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav />
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn active-tab">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={gradesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                     <form onSubmit={this.createNewAssignment} method="post">
@@ -115,15 +156,16 @@ class CreateAssignments extends Component {
                                                 <textarea className="form-control" id="desc" name="desc" rows="3"></textarea>
                                                 </div>
                                         </div>
-                                        <div className="form-group row border-bottom">
+                                        <div className="form-group row">
                                         <div className="col-sm-5">
                                          <button type="submit" className="btn btn-primary pull-right" style={{marginBottom:"5%"}}>Create Assignment</button>
                                         </div>
                                         </div>
 
                                     </form>
-                                    <div>
-                                            <h4 style={{padding:"0.5em"}}>Past Assignments</h4>
+                                    {this.state.assignmentDetails.length > 0 &&
+                                    <div className="border-top">
+                                            <h4 style={{padding:"0.5em"}}>Uploaded Assignments</h4>
                                             <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -136,8 +178,9 @@ class CreateAssignments extends Component {
                                     </tbody>
                                 </table>
                                         </div>
+                                    }
                                         </div>
-                                        
+                                   
                                 </div>
                             </div>
                         </div>
