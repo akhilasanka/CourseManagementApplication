@@ -113,7 +113,6 @@ class GradeAssignment extends Component {
         let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
         let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
         let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
-        let gradesurl = "/faculty/course/" + this.props.match.params.courseID + "/grade";
         return (
             <div>
                 {redirectVar}
@@ -154,11 +153,6 @@ class GradeAssignment extends Component {
                                             <div className="row">
                                                 <Link to={quizurl}>
                                                     <button type="button" className="btn btn-link float-left course-nav-btn">Quiz</button>
-                                                </Link>
-                                            </div>
-                                            <div className="row">
-                                                <Link to={gradesurl}>
-                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Grades</button>
                                                 </Link>
                                             </div>
                                         </ul>

@@ -27,6 +27,7 @@ import CreateQuestion from './Courses/FacultyViews/CreateQuestion';
 import Quiz from './Courses/StudentViews/Quiz';
 import QuizQuestions from './Courses/StudentViews/QuizQuestions';
 import Inbox from './Inbox/Inbox';
+import ShowGrades from './Courses/StudentViews/ShowGrades';
 
 //Create a Main Component
 class Main extends Component {
@@ -60,13 +61,13 @@ class Main extends Component {
                 <Route exact path="/faculty/course/:courseID/files" component={CourseFileUpload}/>
                 <Route exact path="/student/course/:courseID/quiz/:quizID" component={QuizQuestions}/>
                 <Route exact path="/student/course/:courseID/quiz" component={Quiz}/>
-                
                 <Route exact path="/faculty/course/:courseID/quiz" component={CreateQuiz}/>
                 <Route exact path="/faculty/course/:courseID/quiz/:quizID/question/:questionID" component={CreateQuestion}/>
                 <Route exact path="/faculty/course/:courseID/announcements" component={CreateAnnouncements}/>
                 <Route exact path="/student/course/:courseID/announcements" component={ShowAnnouncements}/>
                 <Route exact path="/student/course/:courseID/people" component={ShowPeople}/>
                 <Route exact path="/faculty/course/:courseID/people" component={ShowStudents}/>
+                <Route exact path="/student/course/:courseID/grade" component={ShowGrades}/>
                 <Route exact path="/student/course/:courseID" component={StudentCourseHome}/>
                 <Route exact path="/faculty/course/:courseID" component={FacultyCourseHome}/>
                 

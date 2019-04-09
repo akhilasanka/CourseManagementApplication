@@ -212,4 +212,27 @@ router.get('/course/students', requireAuth, function (req, res) {
 
 });
 
+router.get('/student/grades',  requireAuth, function (req, res) {
+  console.log(req.query);
+
+  kafka.make_request('course_topics', {"path":"student_grades", "body":req.query}, function(err,result){
+    if (err) {
+      console.log(err);
+      res.status(500).json({ responseMessage: 'Database not responding' });
+    }
+    else if (result.status === 200)
+    {
+      console.log("Results found");
+      console.log(result);
+      res.status(200).json({ grades : result.grades});
+      console.log(result.grades);
+    } else if (result.status === 205){
+      console.log("No results found");
+      res.status(200).json({ responseMessage: 'No grades found' });
+    }
+  });
+
+});
+
+
 module.exports = router;

@@ -1,5 +1,6 @@
 var Courses = require('../models/CourseSchema');
 var Users = require('../models/UserSchema');
+var Grades = require('../models/GradesSchema');
 var Waitlist = require('../models/WaitlistSchema');
 var sha1 = require('sha1');
 
@@ -36,6 +37,8 @@ exports.courseService = function courseService(msg, callback) {
         case "waitlist_code":
             generateWaitlistCode(msg, callback);
             break;
+        case "student_grades":
+             getStudentGrades(msg, callback);
     }
 };
 
@@ -258,7 +261,7 @@ function getFacultyCourses(msg, callback) {
 
 function deleteCourse(msg, callback) {
 
-    console.log("In enroll Course topic service. Msg: ", msg);
+    console.log("In delete Course topic service. Msg: ", msg);
     Users.findOne({ _id: msg.body.studentID, role: 'student', 'courses.course_id': parseInt(msg.body.courseID) }, function (err, rows) {
         if (err) {
             console.log(err);
@@ -367,6 +370,28 @@ function generateWaitlistCode(msg, callback) {
             else {
                 console.log("Updation failed");
                 callback(null, { status: 400 });
+            }
+        }
+    })
+}
+
+function getStudentGrades(msg, callback) {
+
+    console.log("In get student grades. Msg: ", msg)
+
+    Grades.findOne({ student_id: msg.body.studentID, course_id: parseInt(msg.body.courseID) }, function (err, results) {
+        if (err) {
+            console.log(err);
+            console.log("Grades list not found");
+            callback(err, "Grades list not found");
+        } else {
+            if (results) {
+                console.log("results:", results);
+                callback(null, { status: 200, grades: results });
+            }
+            else {
+                console.log("No results found");
+                callback(null, { status: 205 });
             }
         }
     })
