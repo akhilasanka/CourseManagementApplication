@@ -21,11 +21,13 @@ class CreateQuiz extends Component {
         var courseID = this.props.match.params.courseID;
         console.log(courseID);
         var facultyID = cookie.load('cookie2');
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/quiz',     
             params: { "courseID": courseID , "facultyID" : facultyID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                 //update the state with the response data
@@ -41,11 +43,13 @@ class CreateQuiz extends Component {
         var id = this.props.match.params.courseID;
         console.log(this.props.match.params);
         const formData = new FormData(event.target);
+        var token = localStorage.getItem("token");
        await axios({
             method: 'post',
             url: 'http://localhost:3001/quiz',     
             data: { "courseID": id, "title": formData.get("title"), "points": formData.get("points")},
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            config: { headers: { 'Content-Type': 'multipart/form-data' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 if (response.status >= 500) {
@@ -55,7 +59,7 @@ class CreateQuiz extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                alert(responseData.responseMessage);
+                swal(responseData.responseMessage);
                 window.location.reload();
             }).catch(function (err) {
                 console.log(err)
@@ -63,11 +67,13 @@ class CreateQuiz extends Component {
     }
 
     publishQuiz = (event,quizID) => {
+        var token = localStorage.getItem("token");
         axios({
             method: 'put',
             url: 'http://localhost:3001/quiz',     
-            params: { quizID: quizID, isPublished:true },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            params: { quizID: quizID },
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
                     swal(response.data.responseMessage);
@@ -109,15 +115,27 @@ class CreateQuiz extends Component {
             redirectVar = <Redirect to="/login" />;
         }
         let quizDetailsDiv = this.state.quizDetails.map((record,index) => {
+             var publishRow = null;
+            if(record.isPublished){
+                publishRow = <span>Published</span>;
+            }
+            else{
+                publishRow = <button type="button" className="btn btn-primary" onClick={(event)=>this.publishQuiz(event,record._id)} style={this.getStyle(record.isPublished)}>Publish</button>;
+            }
             return (
                 <tr key={record.id}>
-                    <td><a href="" onClick={(event)=>this.openQuestions(event,record.id)}>{record.title}</a></td>
+                    <td><a href="" onClick={(event)=>this.openQuestions(event,record._id)}>{record.title}</a></td>
                     <td>{record.points}</td>
                     <td>{this.getRow(record.isPublished)}</td>
-                    <td><button type="button" className="btn btn-primary" onClick={(event)=>this.publishQuiz(event,record.id)} style={this.getStyle(record.isPublished)}>Publish</button></td>
+                    <td>{publishRow}</td>
                 </tr>
             )
             });
+            let assignmenturl = "/faculty/course/" + this.props.match.params.courseID + "/assignments";
+            let filesurl = "/faculty/course/" + this.props.match.params.courseID + "/files";
+            let announcementsurl = "/faculty/course/" + this.props.match.params.courseID + "/announcements";
+            let peopleurl = "/faculty/course/" + this.props.match.params.courseID + "/people";
+            let quizurl = "/faculty/course/" + this.props.match.params.courseID + "/quiz";
         return (
             <div>
                 {redirectVar}
@@ -134,7 +152,33 @@ class CreateQuiz extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-2"> 
-                                    <CourseNav />
+                                    <ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
+                                            <div className="row">
+                                                <Link to={assignmenturl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">Assignments</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={announcementsurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Announcements</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={peopleurl}>
+                                                    <button type="button" className="btn  btn-link float-left course-nav-btn">People</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={filesurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn">Files</button>
+                                                </Link>
+                                            </div>
+                                            <div className="row">
+                                                <Link to={quizurl}>
+                                                    <button type="button" className="btn btn-link float-left course-nav-btn active-tab">Quiz</button>
+                                                </Link>
+                                            </div>
+                                        </ul>
                                     </div>
                                     <div className="col-10">
                                     <form onSubmit={this.createNewQuiz} method="post">

@@ -84,7 +84,7 @@ router.get('/announcements', requireAuth, function(req,res){
   });
 
   router.post('/assignments', requireAuth, function(req,res){
-    console.log("Inside post announcements");
+    console.log("Inside post assignments");
     console.log("Request body:");
     console.log(req.body);
     kafka.make_request('assignment_topics', { "path": "create_assignment", "body": req.body }, function (err, result) {
@@ -93,11 +93,11 @@ router.get('/announcements', requireAuth, function(req,res){
         res.status(500).json({ responseMessage: 'Database not responding' });
       }
       else if (result.status === 200) {
-        console.log("Added file");
+        console.log("Added assignment");
         res.status(200).json({ responseMessage: 'Successfully Saved!' });
       } else if (result.status === 400) {
-        console.log("No results found to update");
-        res.status(400).json({ responseMessage: 'No results found to update' });
+        console.log("Unable to save data");
+        res.status(400).json({ responseMessage: 'Unable to create assignment. Please try again' });
       }
     });
 

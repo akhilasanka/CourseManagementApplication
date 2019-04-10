@@ -379,7 +379,7 @@ function getStudentGrades(msg, callback) {
 
     console.log("In get student grades. Msg: ", msg)
 
-    Grades.findOne({ student_id: msg.body.studentID, course_id: parseInt(msg.body.courseID) }, function (err, results) {
+    Grades.find({ student_id: msg.body.studentID, course_id: parseInt(msg.body.courseID) }, function (err, results) {
         if (err) {
             console.log(err);
             console.log("Grades list not found");

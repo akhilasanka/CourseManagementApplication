@@ -110,7 +110,7 @@ function submitAssignment(msg, callback) {
 function getAssignmentSubmissions(msg, callback) {
 
     console.log("In get assignment submissions. Msg: ", msg);
-    AssignmentSubmissions.find({ "course_id": parseInt(msg.body.courseID) }, function (err, results) {
+    AssignmentSubmissions.find({ "assignment_id": msg.body.assignmentID, "course_id": parseInt(msg.body.courseID) }, function (err, results) {
         if (err) {
             console.log(err);
             console.log("Database error");

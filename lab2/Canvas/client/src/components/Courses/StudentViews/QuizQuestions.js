@@ -19,11 +19,13 @@ class QuizQuestions extends Component {
     componentWillMount() {
         var quizID = this.props.match.params.quizID;
         console.log(quizID);
+        var token = localStorage.getItem("token");
         axios({
             method: 'get',
             url: 'http://localhost:3001/student/quiz/questions',
             params: { "quizID": quizID },
-            config: { headers: { 'Content-Type': 'application/json' } }
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
         })
             .then((response) => {
                 //update the state with the response data
@@ -36,7 +38,6 @@ class QuizQuestions extends Component {
 
     evaluate = (event) => {
         event.preventDefault();
-        swal("Score:2/2");
         let quizDetails = this.state.quizDetails;
         let totalquestions = quizDetails.length;
         const formData = new FormData(event.target);
@@ -51,6 +52,22 @@ class QuizQuestions extends Component {
         }
         console.log(correct);
         swal("Score : "+correct+"/"+totalquestions);
+        var token = localStorage.getItem("token");
+        var quizID = this.props.match.params.quizID;
+        var studentID = cookie.load('cookie2');
+        var courseID = this.props.match.params.courseID;
+        axios({
+            method: 'put',
+            url: 'http://localhost:3001/student/quiz/grade',
+            params: { "quizID": quizID, "studentID": studentID, "courseID": courseID,
+                 "marks": correct, "total": totalquestions },
+            config: { headers: { 'Content-Type': 'application/json' } },
+            headers: {"Authorization" : `Bearer ${token}`}
+        })
+            .then((response) => {
+                console.log(response);
+            });
+
     }
 
     render() {

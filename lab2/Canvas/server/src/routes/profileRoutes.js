@@ -107,11 +107,16 @@ router.get('/profile/img', requireAuth, function (req, res) {
       }
       console.log("Results found");
       console.log(result.img);
+      if(result.img != null){
       var filePath = path.join(__dirname + '../../../uploads/profilepics',result.img);
       console.log("file path:",filePath);
       var base64str = base64_encode(filePath);
       console.log("converted img to base64 and sent");
       res.status(200).json({ base64str: base64str });
+      }
+      else{
+        res.status(204).json({ responseMessage: 'No image found!' });
+      }
     } else if (result.status === 204){
       console.log("No results found");
       res.status(204).json({ responseMessage: 'No image found!' });

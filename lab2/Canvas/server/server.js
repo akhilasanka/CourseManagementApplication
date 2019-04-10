@@ -34,14 +34,11 @@ mongoose.connect(connStr, { useNewUrlParser: true, poolSize: 10, }, function(err
   }
 });
 
-
-var dbConnection = require('./src/dao/dbConnectionPool');
 var loginSignupRoutes = require('./src/routes/loginSignupRoutes');
 var profileRoutes = require('./src/routes/profileRoutes');
 var courseRoutes = require('./src/routes/courseRoutes');
 var announcementAssignmentRoutes = require('./src/routes/announcementAssignmentRoutes');
 var filesRoutes = require('./src/routes/filesRoutes');
-var StudentCourseRouteWithoutPooling = require('./src/routes/StudentCourseWithoutPooling');
 var quizRoutes = require('./src/routes/quizRoutes');
 var inboxRoutes = require('./src/routes/inboxRoutes');
 
@@ -64,14 +61,6 @@ app.use(function(req, res, next) {
     next();
   });
 
-  
-  testDBConection = async() => {
-    let con = await dbConnection();
-    if(con){
-      console.log("Connected to Database");
-    }
-  }
-  testDBConection();
 
 // Log requests to console
 app.use(morgan('dev'));
@@ -89,7 +78,7 @@ app.use('/', profileRoutes);
 app.use('/', courseRoutes);
 app.use('/', announcementAssignmentRoutes);
 app.use('/', filesRoutes);
-app.use('/',quizRoutes);
+app.use('/', quizRoutes);
 app.use('/', inboxRoutes);
 //app.use('/', StudentCourseRouteWithoutPooling);
 

@@ -8,6 +8,7 @@ var profileTopics = require('./services/profileTopics.js');
 var fileTopics = require('./services/fileTopics');
 var assignmentTopics = require('./services/assignmentTopics');
 var announcementTopics = require('./services/announcementTopics');
+var quizTopics = require('./services/quizTopics');
 
 // Set up Database connection
 var config = require('./config/settings');
@@ -79,6 +80,12 @@ function handleTopicRequest(topic_name, fname) {
                     return;
                 });
                 break;
+            case 'quiz_topics':
+                quizTopics.quizService(data.data, function (err, res) {
+                    response(data, res, producer);
+                    return;
+                });
+                break;
         }
     })
 };
@@ -111,3 +118,4 @@ handleTopicRequest("profile_topics", profileTopics);
 handleTopicRequest("file_topics", fileTopics);
 handleTopicRequest("assignment_topics", assignmentTopics);
 handleTopicRequest("announcement_topics",announcementTopics);
+handleTopicRequest("quiz_topics", quizTopics);
