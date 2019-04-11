@@ -14,8 +14,13 @@ class ShowStudents extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            studentDetails: []
+            studentDetails: [],
+            startIndex: 0,
+            currentPage: 1,
+            studentsDisplaySet : [],
+            pagesPerPage: 4
         }
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     componentWillMount() {
@@ -30,9 +35,21 @@ class ShowStudents extends Component {
             headers: { "Authorization": `Bearer ${token}` }
         })
             .then((response) => {
+
+                var records = this.state.pagesPerPage - 1;
+                var results = response.data;
+                console.log(results);
+                var displaySet = results.filter(function (element, index) {
+                    console.log(records);
+                    return index <= records;
+                });
+
+                console.log(displaySet);
+
                 //update the state with the response data
                 this.setState({
-                    studentDetails: this.state.studentDetails.concat(response.data)
+                    studentDetails: this.state.studentDetails.concat(response.data),
+                    studentsDisplaySet : displaySet
                 });
                 console.log("details data", this.state.studentDetails);
             });
@@ -64,6 +81,45 @@ class ShowStudents extends Component {
             });
     }
 
+    handlePagination(event) {
+
+        var target = event.target;
+        var id = target.id;
+        var flag = true;
+        if (id == "prev") {
+            if (this.state.startIndex > 0) {
+                console.log("start index", this.state.startIndex);
+                console.log("pages per page", this.state.pagesPerPage);
+                var startIndex = this.state.startIndex - this.state.pagesPerPage;
+            }
+            else {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+        else {
+            var startIndex = this.state.startIndex + this.state.pagesPerPage;
+            if (startIndex >= this.state.studentDetails.length) {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+
+        if (flag === true) {
+
+
+            var endIndex = startIndex + this.state.pagesPerPage - 1;
+            var results = this.state.studentDetails;
+            var displaySet = results.filter(function (element, index) {
+                return index >= startIndex && index <= endIndex;
+            });
+            this.setState({
+                studentsDisplaySet: displaySet,
+                startIndex: startIndex
+            });
+        }
+    }
+
     render() {
         var id = this.props.match.params.courseID;
         let redirectVar = null;
@@ -75,7 +131,7 @@ class ShowStudents extends Component {
         if (this.state.studentDetails.length === 0) {
             noRecordsMsgDiv = <tr><small>*No records to disply</small></tr>
         }
-        let studentDetailsDiv = this.state.studentDetails.map((record, index) => {
+        let studentDetailsDiv = this.state.studentsDisplaySet.map((record, index) => {
             return (
                 <tr key={record._id}>
                     <td>{record.name}</td>
@@ -150,6 +206,14 @@ class ShowStudents extends Component {
                                                     {studentDetailsDiv}
                                                 </tbody>
                                             </table>
+                                            <div className="pagination-container center-content">
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm" id="prev" onClick={this.handlePagination}>Prev</button>
+                                                </span>
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm float-right" style={{ marginRight: "1.5em" }} id="next" onClick={this.handlePagination} >Next</button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 

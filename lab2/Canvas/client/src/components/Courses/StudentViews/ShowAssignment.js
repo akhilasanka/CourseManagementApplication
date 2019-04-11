@@ -3,15 +3,20 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
+import swal from 'sweetalert';
 
 class ShowAssignments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignmentDetails : []
+            assignmentDetails : [],
+            startIndex: 0,
+            currentPage: 1,
+            assignmentsDisplaySet : [],
+            pagesPerPage: 5
         }
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     componentWillMount(){
@@ -25,9 +30,19 @@ class ShowAssignments extends Component {
             headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
-                //update the state with the response data
+                var records = this.state.pagesPerPage - 1;
+                    var results = response.data;
+                    console.log(results);
+                    var displaySet = results.filter(function (element, index) {
+                        console.log(records);
+                        return index <= records;
+                    });
+
+                    console.log(displaySet);
+
                 this.setState({
-                    assignmentDetails : this.state.assignmentDetails.concat(response.data) 
+                    assignmentDetails : this.state.assignmentDetails.concat(response.data),
+                    assignmentsDisplaySet : displaySet 
                 });
                 console.log("details data",this.state.assignmentDetails);
             });
@@ -40,13 +55,52 @@ class ShowAssignments extends Component {
      window.location = url + "/" + assignmentID;
     }
 
+    handlePagination(event) {
+
+        var target = event.target;
+        var id = target.id;
+        var flag = true;
+        if (id == "prev") {
+            if (this.state.startIndex > 0) {
+                console.log("start index", this.state.startIndex);
+                console.log("pages per page", this.state.pagesPerPage);
+                var startIndex = this.state.startIndex - this.state.pagesPerPage;
+            }
+            else {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+        else {
+            var startIndex = this.state.startIndex + this.state.pagesPerPage;
+            if (startIndex >= this.state.assignmentDetails.length) {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+
+        if (flag === true) {
+
+
+            var endIndex = startIndex + this.state.pagesPerPage - 1;
+            var results = this.state.assignmentDetails;
+            var displaySet = results.filter(function (element, index) {
+                return index >= startIndex && index <= endIndex;
+            });
+            this.setState({
+                assignmentsDisplaySet: displaySet,
+                startIndex: startIndex
+            });
+        }
+    }
+
     render() {
         let redirectVar = null;
         let role = cookie.load('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }
-        let assignmentsDiv = this.state.assignmentDetails.map((record,index) => {
+        let assignmentsDiv = this.state.assignmentsDisplaySet.map((record,index) => {
             return (
                 <tr key={record._id}>
                     <td><a href="" onClick={(event)=>this.openSubmissions(event,record._id)}>{record.title}</a></td>
@@ -123,6 +177,14 @@ class ShowAssignments extends Component {
                                         {assignmentsDiv}
                                     </tbody>
                                 </table>
+                                <div className="pagination-container center-content">
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm" id="prev" onClick={this.handlePagination}>Prev</button>
+                                                </span>
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm float-right" style={{ marginRight: "1.5em" }} id="next" onClick={this.handlePagination} >Next</button>
+                                                </span>
+                                            </div>
                                         </div>
                                         :
                                         <div class="alert alert-info" role="alert">

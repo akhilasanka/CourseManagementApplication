@@ -7,7 +7,7 @@ import '../cssFiles/homeCards.css';
 import Draggable, { DraggableCore } from 'react-draggable';
 //import { Responsive as ResponsiveGridLayout } from 'react-grid-layout';
 //import {sortableContainer, sortableElement} from 'react-sortable-hoc';
-import arrayMove from 'array-move';
+//import arrayMove from 'array-move';
 
 /*const SortableItem = sortableElement(({value}) => <div>{value}</div>);
 
@@ -62,6 +62,7 @@ class Home extends Component {
     render() {
         //iterate over courses to create a table row
         let coursesDiv = this.state.courses.map((course, index) => {
+            let url = "http://localhost:3000/"+cookie.load('cookie1')+"/course/"+course.course_id+"/files";
             return (
                 /*<SortableItem key={`course-${index}`} index={index} >*/
                 <Draggable>
@@ -69,7 +70,7 @@ class Home extends Component {
                         <div className="color-div" style={{ padding: "4rem", background: "wheat" }}>
                         </div>
                         <div className="card-body" >
-                            <p className="card-text"><a href="#">{course.dept}&nbsp;{course.course_id}</a></p>
+                            <p className="card-text"><a href={url}>{course.dept}&nbsp;{course.course_id}</a></p>
                             <i className="fa fa-bullhorn fa-list" aria-hidden="true"></i>
                             <i className="fa fa-file-text fa-list" aria-hidden="true"></i>
                             <i className="fa fa-comments-o fa-list" aria-hidden="true"></i>

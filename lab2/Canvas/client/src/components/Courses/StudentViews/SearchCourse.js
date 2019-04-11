@@ -11,8 +11,12 @@ class SearchCourse extends Component {
         this.state={
             searchResults : [],
             showResults : false,
-            display : false
+            startIndex: 0,
+            currentPage: 1,
+            searchResultsDisplaySet : [],
+            pagesPerPage: 3
         }
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     componentWillMount(){
@@ -51,9 +55,18 @@ class SearchCourse extends Component {
                 if(responseData.dataFound === false){
                     swal("No results found for given entry. Please try with different values.");
                 }else{
+                    var records = this.state.pagesPerPage - 1;
+                    var results = responseData;
+                    console.log(results);
+                    var displaySet = results.filter(function (element, index) {
+                        console.log(records);
+                        return index <= records;
+                    });
+
+                    console.log(displaySet);
                     this.setState({
-                        searchResults : responseData,
-                        display : true
+                        searchResultsDisplaySet: displaySet,
+                        searchResults: responseData
                     });
                 }
             }).catch(function (err) {
@@ -89,17 +102,53 @@ class SearchCourse extends Component {
             .then((responseData) => {
                 //console.log(responseData);
                 swal(responseData.responseMessage);
+                window.location.reload();
             }).catch(function (err) {
                 console.log(err)
             }); 
     }
 
-    render() {
-        let displayStyle = {display : "none"};
-        if(this.state.display === true){
-            displayStyle = {display : "block"};
+    handlePagination(event) {
+
+        var target = event.target;
+        var id = target.id;
+        var flag = true;
+        if (id == "prev") {
+            if (this.state.startIndex > 0) {
+                console.log("start index", this.state.startIndex);
+                console.log("pages per page", this.state.pagesPerPage);
+                var startIndex = this.state.startIndex - this.state.pagesPerPage;
+            }
+            else {
+                flag = false;
+                swal("No more records to show");
+            }
         }
-        let searchResults = this.state.searchResults.map((record,index) => {
+        else {
+            var startIndex = this.state.startIndex + this.state.pagesPerPage;
+            if (startIndex >= this.state.searchResults.length) {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+
+        if (flag === true) {
+
+
+            var endIndex = startIndex + this.state.pagesPerPage - 1;
+            var results = this.state.searchResults;
+            var displaySet = results.filter(function (element, index) {
+                return index >= startIndex && index <= endIndex;
+            });
+            this.setState({
+                searchResultsDisplaySet: displaySet,
+                startIndex: startIndex
+            });
+        }
+    }
+
+    render() {
+        let searchResults = this.state.searchResultsDisplaySet.map((record,index) => {
             const getButtonValue = (seatsLeft) =>{
                 if(seatsLeft>0){
                     return "Enroll";
@@ -184,7 +233,9 @@ class SearchCourse extends Component {
                                     </div>
                                 </form>
                                 <br></br>
-                                <table className="table table-striped" style={displayStyle}>
+                                {this.state.searchResultsDisplaySet.length > 0 &&
+                                <div>
+                                <table className="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Course ID</th>
@@ -202,6 +253,16 @@ class SearchCourse extends Component {
                                         {searchResults}
                                     </tbody>
                                 </table>
+                                <div className="pagination-container center-content">
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm" id="prev" onClick={this.handlePagination}>Prev</button>
+                                                </span>
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm float-right" style={{ marginRight: "1.5em" }} id="next" onClick={this.handlePagination} >Next</button>
+                                                </span>
+                                            </div>
+                                            </div>
+                                        }
                             </div>
                         </div>
                     </div>

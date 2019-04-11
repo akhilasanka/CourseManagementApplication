@@ -13,8 +13,13 @@ class CreateAnnouncements extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            announcementDetails : []
+            announcementDetails : [],
+            startIndex: 0,
+            currentPage: 1,
+            announcementsDisplaySet : [],
+            pagesPerPage: 5
         }
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     componentWillMount(){
@@ -30,9 +35,21 @@ class CreateAnnouncements extends Component {
             headers: {"Authorization" : `Bearer ${token}`}
         })
                 .then((response) => {
+
+                var records = this.state.pagesPerPage - 1;
+                var results = response.data;
+                console.log(results);
+                var displaySet = results.filter(function (element, index) {
+                    console.log(records);
+                    return index <= records;
+                });
+
+                console.log("display set:",displaySet);
+
                 //update the state with the response data
                 this.setState({
-                    announcementDetails : this.state.announcementDetails.concat(response.data) 
+                    announcementDetails : this.state.announcementDetails.concat(response.data) ,
+                    announcementsDisplaySet : displaySet
                 });
                 console.log("details data",this.state.announcementDetails);
             });
@@ -66,13 +83,52 @@ class CreateAnnouncements extends Component {
             }); 
     }
 
+    handlePagination(event) {
+
+        var target = event.target;
+        var id = target.id;
+        var flag = true;
+        if (id == "prev") {
+            if (this.state.startIndex > 0) {
+                console.log("start index", this.state.startIndex);
+                console.log("pages per page", this.state.pagesPerPage);
+                var startIndex = this.state.startIndex - this.state.pagesPerPage;
+            }
+            else {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+        else {
+            var startIndex = this.state.startIndex + this.state.pagesPerPage;
+            if (startIndex >= this.state.announcementDetails.length) {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+
+        if (flag === true) {
+
+
+            var endIndex = startIndex + this.state.pagesPerPage - 1;
+            var results = this.state.announcementDetails;
+            var displaySet = results.filter(function (element, index) {
+                return index >= startIndex && index <= endIndex;
+            });
+            this.setState({
+                announcementsDisplaySet: displaySet,
+                startIndex: startIndex
+            });
+        }
+    }
+
     render() {
         let redirectVar = null;
         let role = cookie.load('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
-        let announcementDetailsDiv = this.state.announcementDetails.map((record,index) => {
+        let announcementDetailsDiv = this.state.announcementsDisplaySet.map((record,index) => {
             let str = record.timestamp;
             let time = str.substring(0, str.indexOf('('));
             return (
@@ -168,6 +224,14 @@ class CreateAnnouncements extends Component {
                                         {announcementDetailsDiv}
                                     </tbody>
                                 </table>
+                                <div className="pagination-container center-content">
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm" id="prev" onClick={this.handlePagination}>Prev</button>
+                                                </span>
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm float-right" style={{ marginRight: "1.5em" }} id="next" onClick={this.handlePagination} >Next</button>
+                                                </span>
+                                            </div>
                                         </div>
                                     }
                                         </div>

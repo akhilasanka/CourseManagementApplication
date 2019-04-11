@@ -7,14 +7,20 @@ import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import download from 'downloadjs';
+import swal from 'sweetalert';
 
 class CourseAssignmentSubmissions extends Component {
     constructor(props) {
         super(props);
         this.state = {
             submissionDetails: [],
-            base64str: null
+            base64str: null,
+            startIndex: 0,
+            currentPage: 1,
+            submissionsDisplaySet : [],
+            pagesPerPage: 5
         }
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     componentWillMount() {
@@ -30,9 +36,21 @@ class CourseAssignmentSubmissions extends Component {
             headers: { "Authorization": `Bearer ${token}` }
         })
             .then((response) => {
+                
+                var records = this.state.pagesPerPage - 1;
+                var results = response.data;
+                console.log(results);
+                var displaySet = results.filter(function (element, index) {
+                    console.log(records);
+                    return index <= records;
+                });
+
+                console.log(displaySet);
+
                 //update the state with the response data
                 this.setState({
-                    submissionDetails: this.state.submissionDetails.concat(response.data)
+                    submissionDetails: this.state.submissionDetails.concat(response.data),
+                    submissionsDisplaySet : displaySet
                 });
                 console.log("details data", this.state.submissionDetails);
             });
@@ -80,13 +98,52 @@ class CourseAssignmentSubmissions extends Component {
         }
     }
 
+    handlePagination(event) {
+
+        var target = event.target;
+        var id = target.id;
+        var flag = true;
+        if (id == "prev") {
+            if (this.state.startIndex > 0) {
+                console.log("start index", this.state.startIndex);
+                console.log("pages per page", this.state.pagesPerPage);
+                var startIndex = this.state.startIndex - this.state.pagesPerPage;
+            }
+            else {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+        else {
+            var startIndex = this.state.startIndex + this.state.pagesPerPage;
+            if (startIndex >= this.state.submissionDetails.length) {
+                flag = false;
+                swal("No more records to show");
+            }
+        }
+
+        if (flag === true) {
+
+
+            var endIndex = startIndex + this.state.pagesPerPage - 1;
+            var results = this.state.submissionDetails;
+            var displaySet = results.filter(function (element, index) {
+                return index >= startIndex && index <= endIndex;
+            });
+            this.setState({
+                submissionsDisplaySet: displaySet,
+                startIndex: startIndex
+            });
+        }
+    }
+
     render() {
         let redirectVar = null;
         let role = cookie.load('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
-        let submissionDiv = this.state.submissionDetails.map((record, index) => {
+        let submissionDiv = this.state.submissionsDisplaySet.map((record, index) => {
             let str = record.timestamp;
             let time = str.substring(0, str.indexOf('('));
             return (
@@ -168,6 +225,14 @@ class CourseAssignmentSubmissions extends Component {
                                                             {submissionDiv}
                                                         </tbody>
                                                     </table>
+                                                    <div className="pagination-container center-content">
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm" id="prev" onClick={this.handlePagination}>Prev</button>
+                                                </span>
+                                                <span className="col-lg-2 col-md-3 col-sm-12 col-xs-12 pad-bot-10">
+                                                    <button className="btn btn-primary btn-sm float-right" style={{ marginRight: "1.5em" }} id="next" onClick={this.handlePagination} >Next</button>
+                                                </span>
+                                            </div>
                                                 </div>
                                             )
                                             :
