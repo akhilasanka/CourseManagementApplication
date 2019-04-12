@@ -92,7 +92,7 @@ class ShowAnnouncements extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

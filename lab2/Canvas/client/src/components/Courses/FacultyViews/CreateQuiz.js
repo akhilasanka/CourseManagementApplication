@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
 import { rooturl } from '../../../config/settings';
 
@@ -20,7 +19,7 @@ class CreateQuiz extends Component {
     componentWillMount(){
         var courseID = this.props.match.params.courseID;
         console.log(courseID);
-        var facultyID = cookie.load('cookie2');
+        var facultyID = localStorage.getItem('cookie2');
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
@@ -110,7 +109,7 @@ class CreateQuiz extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
@@ -202,14 +201,15 @@ class CreateQuiz extends Component {
                                                     </select>
                                                     </div>
                                                 </div>
-                                        <div className="form-group row border-bottom">
+                                        <div className="form-group row">
                                         <div className="col-sm-5">
                                          <button type="submit" className="btn btn-primary pull-right" style={{marginRight:"6em",marginBottom:"5%"}}>Create Quiz</button>
                                         </div>
                                         </div>
 
                                     </form>
-                                    <div>
+                                    {this.state.quizDetails.length > 0 &&
+                                    <div className="border-top">
                                             <h4 style={{padding:"0.5em"}}>Quizzes</h4>
                                             <table className="table table-striped table-bordered">
                                     <thead>
@@ -225,6 +225,7 @@ class CreateQuiz extends Component {
                                     </tbody>
                                 </table>
                                         </div>
+                                    }
                                         </div>
                                         
                                 </div>

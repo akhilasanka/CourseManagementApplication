@@ -13,8 +13,8 @@ class NewCourse extends Component {
 
     createNewCourse = async (event) => {
         event.preventDefault();
-        var facultyID = cookie.load('cookie2');
-		var facultyName = cookie.load('cookie3');
+        var facultyID = localStorage.getItem('cookie2');
+		var facultyName = localStorage.getItem('cookie3');
         const formData = new FormData(event.target);
         var token = localStorage.getItem("token");
        await axios({
@@ -44,7 +44,7 @@ class NewCourse extends Component {
     render() {
 
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         return (

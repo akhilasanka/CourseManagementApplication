@@ -20,7 +20,7 @@ class Inbox extends Component {
 
     async componentDidMount() {
         var email = null;
-        email = cookie.load('cookie4');
+        email = localStorage.getItem('cookie4');
         await this.props.getInboxMessages(email);
         let array = this.props.msgs.msgs;
         let arrayLength = array.length;
@@ -42,7 +42,7 @@ class Inbox extends Component {
 
     handleSelect = async (key) => {
         var email = null;
-        email = cookie.load('cookie4');
+        email = localStorage.getItem('cookie4');
         if (key === "second") {
             await this.props.getInboxMessages(email);
             let array = this.props.msgs.msgs;
@@ -75,7 +75,7 @@ class Inbox extends Component {
 
     render() {
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         let inboxDiv = this.state.inboxMsgs.map((record, index) => {

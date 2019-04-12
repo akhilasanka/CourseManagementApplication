@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/activeTab.css';
 import { Page, Document, pdfjs } from 'react-pdf';
 import '../../cssFiles/pdfGrade.css';
 import swal from 'sweetalert';
@@ -104,7 +103,7 @@ class GradeAssignment extends Component {
     render() {
         const { pageNumber, numPages } = this.state;
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }

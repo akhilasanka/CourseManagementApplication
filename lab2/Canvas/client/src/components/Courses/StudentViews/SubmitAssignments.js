@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
 import { rooturl } from '../../../config/settings';
 
@@ -19,7 +18,7 @@ class SubmitAssignments extends Component {
 
     componentWillMount(){
         var courseID = this.props.match.params.courseID;
-        var studentID = cookie.load('cookie2');
+        var studentID = localStorage.getItem('cookie2');
         var assignmentID = this.props.match.params.assignmentID;
         var token = localStorage.getItem("token");
         axios({
@@ -58,7 +57,7 @@ class SubmitAssignments extends Component {
         event.preventDefault();
         const formDataCurrent = new FormData(event.target);
         var courseID = this.props.match.params.courseID;
-        var studentID = cookie.load('cookie2');
+        var studentID = localStorage.getItem('cookie2');
         var assignmentID = this.props.match.params.assignmentID;
         var comments = formDataCurrent.get('desc');
 
@@ -95,7 +94,7 @@ class SubmitAssignments extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

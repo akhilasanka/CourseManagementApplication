@@ -26,15 +26,18 @@ class Home extends Component {
     }
     //get the courses from backend  
     componentDidMount() {
-        var role = cookie.load('cookie1');
-        var id = cookie.load('cookie2');
+        var role = localStorage.getItem('cookie1');
+        console.log(role);
+        var id = localStorage.getItem('cookie2');
         var token = localStorage.getItem("token");
         let url = '';
         if (role === "faculty") {
             url = "http://"+rooturl+":3001/faculty/home";
+            console.log(url);
         }
         else {
             url = "http://"+rooturl+":3001/student/home";
+            console.log(url);
         }
         axios({
             method: 'get',
@@ -63,7 +66,8 @@ class Home extends Component {
     render() {
         //iterate over courses to create a table row
         let coursesDiv = this.state.courses.map((course, index) => {
-            let url = "http://"+rooturl+":3001"+cookie.load('cookie1')+"/course/"+course.course_id+"/files";
+            let url = "http://"+rooturl+":3000/"+localStorage.getItem('cookie1')+"/course/"+course.course_id+"/files";
+            console.log(url);
             return (
                 /*<SortableItem key={`course-${index}`} index={index} >*/
                 <Draggable>
@@ -83,20 +87,26 @@ class Home extends Component {
             )
         });
         let redirectVar = '';
-        /*if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />
-        }*/
+        }
         return (
             <div>
                 {redirectVar}
                 <div className='rowC' style={{ display: "flex", flexDirection: "row" }}>
                     <Navigation />
                     <div className="container">
+                        {this.state.courses.length > 0 ?
                             <div className="row mt-5">
                                {/* <SortableContainer onSortEnd={this.onSortEnd} axis="xy"> */}
                                     {coursesDiv}
                                 {/*</SortableContainer> */}
                             </div>
+                            :
+                            <div>
+                                <h2 style={{margin: "3em"}}>Welcome to Canvas!</h2>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

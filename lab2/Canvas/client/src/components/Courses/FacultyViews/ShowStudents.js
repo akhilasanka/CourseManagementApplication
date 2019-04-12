@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/activeTab.css';
 import '../../cssFiles/courseNav.css';
 import swal from 'sweetalert';
 import { rooturl } from '../../../config/settings';
@@ -122,7 +121,7 @@ class ShowStudents extends Component {
     render() {
         var id = this.props.match.params.courseID;
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }
@@ -190,6 +189,9 @@ class ShowStudents extends Component {
                                         </ul>
                                     </div>
                                     <div className="col-10">
+                                    {this.state.studentDetails.length>0
+                                                        ?
+                                                        (
                                         <div>
                                             {noRecordsMsgDiv}
                                             <table className="table table-striped table-bordered">
@@ -214,6 +216,12 @@ class ShowStudents extends Component {
                                                 </span>
                                             </div>
                                         </div>
+                                                        )
+                                                        :
+                                                        <div class="alert alert-info" role="alert">
+                                                                There are no registered students yet
+                                                            </div>
+                                    }
                                     </div>
 
                                 </div>

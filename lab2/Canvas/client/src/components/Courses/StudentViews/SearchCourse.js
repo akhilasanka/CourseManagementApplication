@@ -79,12 +79,12 @@ class SearchCourse extends Component {
 
     enroll = async (event,courseID,seatsLeft) => {
         event.preventDefault();
-        let studentID = cookie.load('cookie2');
+        let studentID = localStorage.getItem('cookie2');
         let status = 'W';
         if(seatsLeft>0){
             status = 'E';
         }
-        let studentName = cookie.load('cookie3');
+        let studentName = localStorage.getItem('cookie3');
         var token = localStorage.getItem("token");
         await axios({
             method: 'post',
@@ -103,7 +103,7 @@ class SearchCourse extends Component {
             .then((responseData) => {
                 //console.log(responseData);
                 swal(responseData.responseMessage);
-                window.location.reload();
+                //window.location.reload();
             }).catch(function (err) {
                 console.log(err)
             }); 
@@ -176,7 +176,7 @@ class SearchCourse extends Component {
         });
         
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         return (

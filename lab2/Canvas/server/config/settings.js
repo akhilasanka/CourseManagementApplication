@@ -1,5 +1,14 @@
 'use strict';
 module.exports = {
     'secret_key': 'secretshhh123',
-    'client' : '34.203.217.58'
+    'secret_key': 'secretshhh123',
+    'database_type': 'mongodb',
+    'database_username': 'root',
+    'database_password' : 'password',
+    'database_host': 'localhost',
+    'database_port': '27017',
+    'database_name': 'canvas',
+    'backend_port': '3001',
+    'connection_string': 'mongodb+srv://root:password631@273-qoppd.mongodb.net/canvas?retryWrites=true',
+    'client' : 'localhost'
 };

@@ -23,6 +23,7 @@ class ShowAssignments extends Component {
     componentWillMount(){
         var id = this.props.match.params.courseID;
         var token = localStorage.getItem("token");
+        console.log('http://'+rooturl+':3001/assignments');
         axios({
             method: 'get',
             url: 'http://'+rooturl+':3001/assignments',     
@@ -97,7 +98,7 @@ class ShowAssignments extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

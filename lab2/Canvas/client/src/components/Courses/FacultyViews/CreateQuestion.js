@@ -4,7 +4,6 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
 import { rooturl } from '../../../config/settings';
 
@@ -135,7 +134,7 @@ class CreateQuestion extends Component {
     render() {
         var questionID = this.props.match.params.questionID;
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "faculty") {
             redirectVar = <Redirect to="/login" />;
         }

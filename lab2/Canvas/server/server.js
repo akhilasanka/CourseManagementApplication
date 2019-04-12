@@ -22,6 +22,17 @@ app.use(passport.initialize());
 // Bring in defined Passport Strategy
 require('./config/passport').passport;
 
+var config = require('./config/settings');
+var mongoose = require('mongoose');
+var connStr = config.database_type + '://' + config.database_username + ':' + config.database_password + '@' + config.database_host + ':' + config.database_port + '/' + config.database_name;
+//var connStr = config.connection_string;
+console.log(connStr);
+mongoose.connect(connStr, { useNewUrlParser: true, poolSize: 10, }, function(err) {
+  if (err) throw err;
+  else {
+      console.log('Successfully connected to MongoDB');
+  }
+});
 
 var loginSignupRoutes = require('./src/routes/loginSignupRoutes');
 var profileRoutes = require('./src/routes/profileRoutes');

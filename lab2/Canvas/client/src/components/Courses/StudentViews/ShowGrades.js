@@ -17,7 +17,7 @@ class ShowGrades extends Component {
     }
 
     componentWillMount(){
-        var id = cookie.load('cookie2');
+        var id = localStorage.getItem('cookie2');
         var courseID = this.props.match.params.courseID;
         console.log(id);
         var token = localStorage.getItem("token");
@@ -39,7 +39,7 @@ class ShowGrades extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

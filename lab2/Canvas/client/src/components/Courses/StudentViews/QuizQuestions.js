@@ -53,7 +53,7 @@ class QuizQuestions extends Component {
         swal("Score : "+correct+"/"+totalquestions);
         var token = localStorage.getItem("token");
         var quizID = this.props.match.params.quizID;
-        var studentID = cookie.load('cookie2');
+        var studentID = localStorage.getItem('cookie2');
         var courseID = this.props.match.params.courseID;
         axios({
             method: 'put',
@@ -71,7 +71,7 @@ class QuizQuestions extends Component {
 
     render() {
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

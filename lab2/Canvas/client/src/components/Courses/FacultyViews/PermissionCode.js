@@ -16,7 +16,7 @@ class PermissionCode extends Component {
     }
 
     componentWillMount() {
-        var facultyID = cookie.load('cookie2');
+        var facultyID = localStorage.getItem('cookie2');
         if (facultyID) {
             var token = localStorage.getItem("token");
             axios({
@@ -74,7 +74,7 @@ class PermissionCode extends Component {
     render() {
 
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         //iterate over waitlisted students under a faculty to create a table rows

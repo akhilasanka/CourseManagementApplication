@@ -15,19 +15,19 @@ class Nav extends Component {
     }
 
     componentWillMount(){
-        if(cookie.load('cookie1')=="student"){
+        if(localStorage.getItem('cookie1')=="student"){
             this.setState({inboxURL: "/student/inbox"});
         }
-        if(cookie.load('cookie1')=="faculty"){
+        if(localStorage.getItem('cookie1')=="faculty"){
             this.setState({inboxURL: "/faculty/inbox"});
         }
     }
 
     openHomePage = () => {
-        if (cookie.load('cookie1') == "faculty") {
+        if (localStorage.getItem('cookie1') == "faculty") {
             window.location = "/faculty/home";
         }
-        if (cookie.load('cookie1') == "student") {
+        if (localStorage.getItem('cookie1') == "student") {
             window.location = "/student/home";
         }
     }

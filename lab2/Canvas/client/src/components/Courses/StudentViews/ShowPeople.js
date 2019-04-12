@@ -92,7 +92,7 @@ class ShowPeople extends Component {
     render() {
         var id = this.props.match.params.courseID;
         let redirectVar = null;
-        let role = cookie.load('cookie1');
+        let role = localStorage.getItem('cookie1');
         if (role != "student") {
             redirectVar = <Redirect to="/login" />;
         }

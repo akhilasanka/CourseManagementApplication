@@ -17,8 +17,8 @@ class CourseModal extends Component {
 
 
     componentWillMount() {
-        var role = cookie.load('cookie1');
-        var id = cookie.load('cookie2');
+        var role = localStorage.getItem('cookie1');
+        var id = localStorage.getItem('cookie2');
         let url = '';
         this.setState({ role: role });
         if (role === "faculty") {
@@ -46,35 +46,35 @@ class CourseModal extends Component {
     }
 
     openCourseCreationPage = () => {
-        if (cookie.load('cookie1') == "faculty") {
+        if (localStorage.getItem('cookie1') == "faculty") {
             window.location = "/faculty/course/new";
         }
     }
 
     searchCourses = () => {
-        if (cookie.load('cookie1') == "student") {
+        if (localStorage.getItem('cookie1') == "student") {
             window.location = "/student/course/search";
         }
     }
 
 
     openMyCourses = () => {
-        if (cookie.load('cookie1') == "student") {
+        if (localStorage.getItem('cookie1') == "student") {
             window.location = "/student/course/my-courses";
         }
     }
 
     openCourse = (event, courseID) => {
-        if (cookie.load('cookie1') == "faculty") {
+        if (localStorage.getItem('cookie1') == "faculty") {
             window.location = "/faculty/course/" + courseID + "/files";
         }
-        if (cookie.load('cookie1') == "student") {
+        if (localStorage.getItem('cookie1') == "student") {
             window.location = "/student/course/" + courseID + "/files";
         }
     }
 
     generatePermissionCode = () => {
-        if (cookie.load('cookie1') == "faculty") {
+        if (localStorage.getItem('cookie1') == "faculty") {
             window.location = "/faculty/permissionCode";
         }
     }

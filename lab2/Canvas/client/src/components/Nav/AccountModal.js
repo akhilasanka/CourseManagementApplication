@@ -15,15 +15,16 @@ class AccountModal extends Component {
     }
 
     logout = () => {
-        cookie.remove('cookie1', {path: '/'});
-        cookie.remove('cookie2', {path: '/'});
-        cookie.remove('cookie3', {path: '/'});
+        //cookie.remove('cookie1', {path: '/'});
+        //cookie.remove('cookie2', {path: '/'});
+        //cookie.remove('cookie3', {path: '/'});
+        localStorage.clear();
         console.log("All cookies removed!");
         window.location = "/";
     }
 
     openProfilePage = () => {
-        if(cookie.load('cookie1')=="student"){
+        if(localStorage.getItem('cookie1')=="student"){
             window.location = "/student/profile";
         }else{
             window.location = "/faculty/profile";
@@ -32,18 +33,18 @@ class AccountModal extends Component {
     }
 
     componentWillMount() {
-        if (cookie.load('cookie1')) {
+        if (localStorage.getItem('cookie1')) {
             console.log("able to read cookie");
-            let name = cookie.load('cookie3');
+            let name = localStorage.getItem('cookie3');
             console.log(name);
             this.setState({
                 name: name
             });
         }
-        if(cookie.load('cookie1')=="student"){
+        if(localStorage.getItem('cookie1')=="student"){
             this.setState({url: "/student/profile"});
         }
-        if(cookie.load('cookie1')=="faculty"){
+        if(localStorage.getItem('cookie1')=="faculty"){
             this.setState({url: "/faculty/profile"});
         }
 

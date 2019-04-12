@@ -75,7 +75,7 @@ class ComposeMessage extends Component {
 
     render() {
         var fromEmail = null;
-        fromEmail = cookie.load('cookie4');
+        fromEmail = localStorage.getItem('cookie4');
 
         const { value } = this.state;
         const inputProps = {

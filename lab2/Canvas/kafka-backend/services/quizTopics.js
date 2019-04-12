@@ -229,7 +229,7 @@ function getQuizQuestions(msg, callback) {
     });
 }
 
-function  gradeQuiz(msg, callback){
+function  gradeQuiz(msg, callback) {
     console.log("In grade quiz. Msg: ", msg);
     Grades.findOne({ id: msg.body.quizID }, function (err, rows) {
         if (err) {
@@ -283,6 +283,26 @@ function  gradeQuiz(msg, callback){
                         }
                     }
                 });
+            }
+        }
+    });
+}
+
+function publishQuiz(msg, callback) {
+    console.log("In publish quiz. Msg: ", msg);
+    Quizzes.findOneAndUpdate({ _id: msg.body.quizID }, { $set: { isPublished: true }} , function (err, user) {
+        if (err) {
+            console.log(err);
+            console.log("unable to publish quiz");
+            callback(err, "Database Error when publishing quiz");
+        } 
+        else {
+            if(user){
+            console.log("Quiz sucessfully published");
+            callback(null, { status: 200, user });
+            }
+            else{
+            callback(null, {status: 400})
             }
         }
     });

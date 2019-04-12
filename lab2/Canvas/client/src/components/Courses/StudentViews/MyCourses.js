@@ -14,7 +14,7 @@ class MyCourses extends Component {
         }
     }
     componentWillMount(){
-        var id = cookie.load('cookie2');
+        var id = localStorage.getItem('cookie2');
         axios({
             method: 'get',
             url: 'http://'+rooturl+':3001/student/home',     
@@ -32,7 +32,7 @@ class MyCourses extends Component {
 
     drop = async (event,courseID,status) => {
         event.preventDefault();
-        let studentID = cookie.load('cookie2');
+        let studentID = localStorage.getItem('cookie2');
         await axios({
             method: 'delete',
             url: 'http://'+rooturl+':3001/student/course/delete',     
@@ -57,7 +57,7 @@ class MyCourses extends Component {
 
     render() {
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         let courseDetailsDiv = this.state.courseDetails.map((record,index) => {

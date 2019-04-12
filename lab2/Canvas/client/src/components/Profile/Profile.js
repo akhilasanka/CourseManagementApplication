@@ -32,8 +32,8 @@ class Profile extends Component {
 
    async componentDidMount() {
        
-        var role = cookie.load('cookie1');
-        var id = cookie.load('cookie2');
+        var role = localStorage.getItem('cookie1');
+        var id = localStorage.getItem('cookie2');
         if (role) {
           await this.props.getProfile(id, role);
           if(this.props.profile.data.name !== null){
@@ -90,8 +90,8 @@ class Profile extends Component {
 
     updateProfile = async (event) => {
         event.preventDefault();
-        var role = cookie.load('cookie1');
-        var id = cookie.load('cookie2');
+        var role = localStorage.getItem('cookie1');
+        var id = localStorage.getItem('cookie2');
         const formData = new FormData(event.target);
         let gender = 'M';
         if(this.state.isFemale){
@@ -116,8 +116,8 @@ class Profile extends Component {
         this.setState({ selectedFile: e.target.files[0] });
         console.log("state",this.state.selectedFile);
 
-        var id = cookie.load('cookie2');
-        var role = cookie.load('cookie1');
+        var id = localStorage.getItem('cookie2');
+        var role = localStorage.getItem('cookie1');
         let formData = new FormData();
         formData.append('id', id);
         formData.append('role', role);
@@ -128,8 +128,8 @@ class Profile extends Component {
 
     removePic = async (e) => {
         console.log("inside remove pic method");
-        var id = cookie.load('cookie2');
-        var role = cookie.load('cookie1');
+        var id = localStorage.getItem('cookie2');
+        var role = localStorage.getItem('cookie1');
 
         await this.props.removeProfilePic(id, role);
     }
@@ -138,7 +138,7 @@ class Profile extends Component {
 
     render() {
         let redirectVar = null;
-        if (!cookie.load('cookie1')) {
+        if (!localStorage.getItem('cookie1')) {
             redirectVar = <Redirect to="/login" />;
         }
         let removePicButton = null;
