@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 
 class ShowAnnouncements extends Component {
@@ -26,7 +27,7 @@ class ShowAnnouncements extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/announcements',     
+            url: 'http://'+rooturl+':3001/announcements',     
             params: { "courseID": id },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -159,7 +160,9 @@ class ShowAnnouncements extends Component {
                                         </ul>
                                     </div>
                                     <div className="col-10">
+                                    {this.state.announcementDetails.length > 0 ?
                                     <div>
+                                   
                                             <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -180,6 +183,11 @@ class ShowAnnouncements extends Component {
                                                 </span>
                                             </div>
                                         </div>
+                                        :
+                                        <div class="alert alert-info" role="alert">
+                                            No announcements to display
+                                        </div>
+                                    }
                                         </div>
                                         
                                 </div>

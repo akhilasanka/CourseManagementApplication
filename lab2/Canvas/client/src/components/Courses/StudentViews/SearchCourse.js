@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 class SearchCourse extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class SearchCourse extends Component {
         if(validInput == true){
         await axios({
             method: 'get',
-            url: 'http://localhost:3001/course/search',     
+            url: 'http://'+rooturl+':3001/course/search',     
             params: { "course_id": formData.get("courseID"), "dept": formData.get("dept"), 
                     "operation": formData.get("operation"), "term": formData.get("term")},
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
@@ -87,7 +88,7 @@ class SearchCourse extends Component {
         var token = localStorage.getItem("token");
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/student/enroll',     
+            url: 'http://'+rooturl+':3001/student/enroll',     
             data: {courseID : courseID, studentID : studentID, status : status, studentName: studentName},
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
             headers: {"Authorization" : `Bearer ${token}`}

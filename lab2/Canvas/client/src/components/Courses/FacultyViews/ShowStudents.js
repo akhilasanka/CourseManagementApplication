@@ -3,12 +3,11 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import '../../cssFiles/courseNav.css';
 import swal from 'sweetalert';
-
+import { rooturl } from '../../../config/settings';
 
 class ShowStudents extends Component {
     constructor(props) {
@@ -29,7 +28,7 @@ class ShowStudents extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/course/students',
+            url: 'http://'+rooturl+':3001/course/students',
             params: { "courseID": id },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: { "Authorization": `Bearer ${token}` }
@@ -61,7 +60,7 @@ class ShowStudents extends Component {
         var courseID = this.props.match.params.courseID;
         await axios({
             method: 'delete',
-            url: 'http://localhost:3001/student/course/delete',
+            url: 'http://'+rooturl+':3001/student/course/delete',
             params: { courseID: courseID, studentID: studentID },
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })

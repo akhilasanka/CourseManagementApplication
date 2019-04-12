@@ -3,11 +3,11 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
 import download from 'downloadjs';
+import { rooturl } from '../../../config/settings';
 
 
 class CourseFileUpload extends Component {
@@ -25,7 +25,7 @@ class CourseFileUpload extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/files',     
+            url: 'http://'+rooturl+':3001/files',     
             params: { "courseID": courseID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -61,7 +61,7 @@ class CourseFileUpload extends Component {
         console.log(this.props.match.params);
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/files/upload',     
+            url: 'http://'+rooturl+':3001/files/upload',     
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -85,7 +85,7 @@ class CourseFileUpload extends Component {
         event.preventDefault();
         axios({
             method: 'get',
-            url: 'http://localhost:3001/file/base64str',
+            url: 'http://'+rooturl+':3001/file/base64str',
             params: { "fileName": file },
             config: { headers: { 'Content-Type': 'application/json' } }
         })

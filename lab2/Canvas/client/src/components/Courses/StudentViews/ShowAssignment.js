@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 class ShowAssignments extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class ShowAssignments extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/assignments',     
+            url: 'http://'+rooturl+':3001/assignments',     
             params: { "courseID": id },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}

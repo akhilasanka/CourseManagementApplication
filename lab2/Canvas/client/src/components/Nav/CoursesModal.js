@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import { Redirect } from 'react-router';
 import '../cssFiles/homeNavModal.css';
+import {rooturl} from '../../config/settings';
 
 
 class CourseModal extends Component {
@@ -22,11 +22,11 @@ class CourseModal extends Component {
         let url = '';
         this.setState({ role: role });
         if (role === "faculty") {
-            url = "http://localhost:3001/faculty/home";
+            url = "http://"+rooturl+":3001/faculty/home";
             
         }
         else {
-            url = "http://localhost:3001/student/home";
+            url = "http://"+rooturl+":3001/student/home";
         }
         axios({
             method: 'get',

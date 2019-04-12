@@ -3,10 +3,10 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import download from 'downloadjs';
+import { rooturl } from '../../../config/settings';
 
 
 class DownloadFiles extends Component {
@@ -23,7 +23,7 @@ class DownloadFiles extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/files',
+            url: 'http://'+rooturl+':3001/files',
             params: { "courseID": courseID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: { "Authorization": `Bearer ${token}` }
@@ -42,7 +42,7 @@ class DownloadFiles extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/file/base64str',
+            url: 'http://'+rooturl+':3001/base64str',
             params: { "fileName": file },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: { "Authorization": `Bearer ${token}` }

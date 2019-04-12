@@ -22,14 +22,14 @@ class AccountModal extends Component {
         window.location = "/";
     }
 
-    /*openProfilePage = () => {
+    openProfilePage = () => {
         if(cookie.load('cookie1')=="student"){
             window.location = "/student/profile";
         }else{
             window.location = "/faculty/profile";
         }
        
-    }*/
+    }
 
     componentWillMount() {
         if (cookie.load('cookie1')) {
@@ -74,7 +74,7 @@ class AccountModal extends Component {
 
                                 <ul>
                                     <Link to={this.state.url}>
-                                    <button type="button" className="btn btn-link float-left" onClick="$('#profile').modal('hide')">Profile</button>
+                                    <button type="button" className="btn btn-link float-left" onClick={this.openProfilePage}>Profile</button>
                                     </Link>
                                 </ul>
                     </div>

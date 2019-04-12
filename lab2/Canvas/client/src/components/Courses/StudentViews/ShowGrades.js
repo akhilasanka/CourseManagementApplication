@@ -3,9 +3,9 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseNav.css';
+import { rooturl } from '../../../config/settings';
 
 
 class ShowGrades extends Component {
@@ -23,7 +23,7 @@ class ShowGrades extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/grades',     
+            url: 'http://'+rooturl+':3001/student/grades',     
             params: { "studentID": id, "courseID": courseID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}

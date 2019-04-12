@@ -1,11 +1,12 @@
 import  { AUTH_LOGIN } from './types';
 import axios from 'axios';
+import { rooturl } from '../config/settings';
 
 export const authLogin = (data) => dispatch => {
     axios.defaults.withCredentials = true;
         axios({
             method: 'post',
-            url: 'http://localhost:3001/login',
+            url: 'http://'+rooturl+':3001/login',
             // data: {"jsonData" : JSON.stringify(data)},        
             data: data,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }

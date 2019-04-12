@@ -3,10 +3,10 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 
 class CreateAnnouncements extends Component {
@@ -29,7 +29,7 @@ class CreateAnnouncements extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/announcements',     
+            url: 'http://'+rooturl+':3001/announcements',     
             params: { "courseID": id , "facultyID" : facultyID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -63,7 +63,7 @@ class CreateAnnouncements extends Component {
         var token = localStorage.getItem("token");
        await axios({
             method: 'post',
-            url: 'http://localhost:3001/announcements',     
+            url: 'http://'+rooturl+':3001/announcements',     
             data: { "courseID": id, "title": formData.get("title"), "announcement": formData.get("desc")},
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
             headers: {"Authorization" : `Bearer ${token}`}

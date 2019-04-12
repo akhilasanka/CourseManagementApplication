@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 class MyCourses extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class MyCourses extends Component {
         var id = cookie.load('cookie2');
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/home',     
+            url: 'http://'+rooturl+':3001/student/home',     
             params: { "id": id },
             config: { headers: { 'Content-Type': 'application/json' } }
         })
@@ -34,7 +35,7 @@ class MyCourses extends Component {
         let studentID = cookie.load('cookie2');
         await axios({
             method: 'delete',
-            url: 'http://localhost:3001/student/course/delete',     
+            url: 'http://'+rooturl+':3001/student/course/delete',     
             params: {courseID : courseID, studentID : studentID, status: status},
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })

@@ -1,11 +1,12 @@
 import  { SIGNUP } from './types';
 import axios from 'axios';
 import swal from 'sweetalert';
+import {rooturl} from '../config/settings';
 
 export const signup = (data) => dispatch => {
     axios({
         method: 'post',
-        url: 'http://localhost:3001/signup',       
+        url: 'http://'+rooturl+':3001/signup',       
         data: data,
         config: { headers: { 'Content-Type': 'multipart/form-data' } }
     })

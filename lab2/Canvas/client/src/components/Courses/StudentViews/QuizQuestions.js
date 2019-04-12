@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
-import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 
 class QuizQuestions extends Component {
@@ -22,7 +21,7 @@ class QuizQuestions extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/quiz/questions',
+            url: 'http://'+rooturl+':3001/student/quiz/questions',
             params: { "quizID": quizID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -58,7 +57,7 @@ class QuizQuestions extends Component {
         var courseID = this.props.match.params.courseID;
         axios({
             method: 'put',
-            url: 'http://localhost:3001/student/quiz/grade',
+            url: 'http://'+rooturl+':3001/student/quiz/grade',
             params: { "quizID": quizID, "studentID": studentID, "courseID": courseID,
                  "marks": correct, "total": totalquestions },
             config: { headers: { 'Content-Type': 'application/json' } },

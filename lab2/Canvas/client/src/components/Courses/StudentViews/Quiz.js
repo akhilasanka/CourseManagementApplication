@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
-import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 
 class Quiz extends Component {
@@ -21,7 +21,7 @@ class Quiz extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/quiz',     
+            url: 'http://'+rooturl+':3001/student/quiz',     
             params: { "courseID": courseID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -111,6 +111,9 @@ class Quiz extends Component {
                                         </ul>
                                     </div>
                                     <div className="col-10">
+                                    {this.state.quizDetails.length > 0 ?
+                                   
+                                   <div>
                                             <table className="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -123,6 +126,12 @@ class Quiz extends Component {
                                     </tbody>
                                 </table>
                                         </div>
+                                        :
+                                        <div class="alert alert-info" role="alert">
+                                            No quizzes available to display
+                                        </div>
+                                    }
+                                    </div>
                                         
                                 </div>
                             </div>

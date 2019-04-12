@@ -57,10 +57,8 @@ class Nav extends Component {
                                 <CourseModal />
                         </li>
                         <li className="nav-item border-bottom">
-                            <Link to={this.state.inboxURL}>
-                            <a className="nav-link" href="#" ><i className="fa fa-inbox"></i><br />
+                            <a className="nav-link" href={this.state.inboxURL} ><i className="fa fa-inbox"></i><br />
                                 Inbox</a>
-                            </Link>
                         </li>
                     </ul>
                 </nav>

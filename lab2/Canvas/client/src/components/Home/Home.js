@@ -14,6 +14,7 @@ import Draggable, { DraggableCore } from 'react-draggable';
 const SortableContainer = sortableContainer(({children}) => {
   return <div>{children}</div>;
 });*/
+import {rooturl} from '../../config/settings';
 
 class Home extends Component {
 
@@ -30,10 +31,10 @@ class Home extends Component {
         var token = localStorage.getItem("token");
         let url = '';
         if (role === "faculty") {
-            url = "http://localhost:3001/faculty/home";
+            url = "http://"+rooturl+":3001/faculty/home";
         }
         else {
-            url = "http://localhost:3001/student/home";
+            url = "http://"+rooturl+":3001/student/home";
         }
         axios({
             method: 'get',
@@ -62,14 +63,14 @@ class Home extends Component {
     render() {
         //iterate over courses to create a table row
         let coursesDiv = this.state.courses.map((course, index) => {
-            let url = "http://localhost:3000/"+cookie.load('cookie1')+"/course/"+course.course_id+"/files";
+            let url = "http://"+rooturl+":3001"+cookie.load('cookie1')+"/course/"+course.course_id+"/files";
             return (
                 /*<SortableItem key={`course-${index}`} index={index} >*/
                 <Draggable>
-                    <div className="card card-custom mx-5 mb-5" key={course.course_id} style={{ boxShadow: "2px 2px 2px #888888" }}>
+                    <div className="card card-custom mx-5 mb-5" key={index} style={{ boxShadow: "2px 2px 2px #888888" }}>
                         <div className="color-div" style={{ padding: "4rem", background: "wheat" }}>
                         </div>
-                        <div className="card-body" >
+                        <div className="card-body" key={course.course_id} >
                             <p className="card-text"><a href={url}>{course.dept}&nbsp;{course.course_id}</a></p>
                             <i className="fa fa-bullhorn fa-list" aria-hidden="true"></i>
                             <i className="fa fa-file-text fa-list" aria-hidden="true"></i>

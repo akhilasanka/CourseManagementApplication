@@ -1,6 +1,7 @@
 import  { GET_PROFILE, REMOVE_PROFILE_PIC, UPDATE_PROFILE, UPLOAD_PROFILE_PIC } from './types';
 import axios from 'axios';
 import swal from 'sweetalert';
+import {rooturl} from '../config/settings';
 
 
 export const getProfile = (id, role) => 
@@ -14,7 +15,7 @@ async (dispatch) => {
     var token = localStorage.getItem("token");
     await axios({
         method: 'get',
-        url: 'http://localhost:3001/profile',
+        url: 'http://'+rooturl+':3001/profile',
         params: { "id": id, "table": role },
         config: { headers: { 'Content-Type': 'application/json' } },
         headers: {"Authorization" : `Bearer ${token}`}
@@ -36,7 +37,7 @@ async (dispatch) => {
                 result.imgName = responseData.img;
               await axios({
                     method: 'get',
-                    url: 'http://localhost:3001/profile/img',
+                    url: 'http://'+rooturl+':3001/profile/img',
                     params: { "id": id, "role": role },
                     config: { headers: { 'Content-Type': 'application/json' } },
                     headers: {"Authorization" : `Bearer ${token}`}
@@ -72,7 +73,7 @@ async (dispatch) => {
     var token = localStorage.getItem("token");
     axios({
         method: 'put',
-        url: 'http://localhost:3001/remove/img',
+        url: 'http://'+rooturl+':3001/remove/img',
         data: {id:id, role:role},
         config: { headers: { 'Content-Type': 'multipart/form-data' } },
         headers: {"Authorization" : `Bearer ${token}`}
@@ -101,7 +102,7 @@ async (dispatch) => {
     var token = localStorage.getItem("token");
     await axios({
         method: 'post',
-        url: 'http://localhost:3001/profile',
+        url: 'http://'+rooturl+':3001/profile',
         data: data,
         config: { headers: { 'Content-Type': 'multipart/form-data' } },
         headers: {"Authorization" : `Bearer ${token}`}
@@ -130,7 +131,7 @@ async (dispatch) => {
     var token = localStorage.getItem("token");
     axios({
         method: 'post',
-        url: 'http://localhost:3001/img/upload',
+        url: 'http://'+rooturl+':3001/img/upload',
         data: data,
         config: { headers: { 'Content-Type': 'multipart/form-data' } },
         headers: {"Authorization" : `Bearer ${token}`}

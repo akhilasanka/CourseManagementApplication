@@ -3,10 +3,10 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 
 class CreateQuestion extends Component {
@@ -34,7 +34,7 @@ class CreateQuestion extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/question',
+            url: 'http://'+rooturl+':3001/question',
             params: { "quizID": quizID, "questionID": questionID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: { "Authorization": `Bearer ${token}` }
@@ -81,7 +81,7 @@ class CreateQuestion extends Component {
         var token = localStorage.getItem("token");
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/question',
+            url: 'http://'+rooturl+':3001/question',
             data: {
                 questionID: questionID,
                 quizID: quizID, question: formData.get('question'), optA: formData.get("optA"),

@@ -3,10 +3,10 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './StudentCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 class SubmitAssignments extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class SubmitAssignments extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/student/assignmentSubmissions',     
+            url: 'http://'+rooturl+':3001/student/assignmentSubmissions',     
             params: { "courseID": courseID , "studentID" : studentID, "assignmentID": assignmentID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -73,7 +73,7 @@ class SubmitAssignments extends Component {
         var token = localStorage.getItem("token");
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/assignments/upload',     
+            url: 'http://'+rooturl+':3001/assignments/upload',     
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
             headers: {"Authorization" : `Bearer ${token}`}

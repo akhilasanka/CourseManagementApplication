@@ -6,8 +6,6 @@ import Home from './Home/Home';
 import Profile from './Profile/Profile';
 import NewCourse from './Courses/FacultyViews/NewCourse';
 import PermissionCode from './Courses/FacultyViews/PermissionCode';
-import StudentCourseHome from './Courses/StudentViews/StudentCourseHome';
-import FacultyCourseHome from './Courses/FacultyViews/FacultyCourseHome';
 import SearchCourse from './Courses/StudentViews/SearchCourse';
 import MyCourses from './Courses/StudentViews/MyCourses';
 import CreateAssignments from './Courses/FacultyViews/CreateAssignments';
@@ -68,8 +66,6 @@ class Main extends Component {
                 <Route exact path="/student/course/:courseID/people" component={ShowPeople}/>
                 <Route exact path="/faculty/course/:courseID/people" component={ShowStudents}/>
                 <Route exact path="/student/course/:courseID/grade" component={ShowGrades}/>
-                <Route exact path="/student/course/:courseID" component={StudentCourseHome}/>
-                <Route exact path="/faculty/course/:courseID" component={FacultyCourseHome}/>
                 
                 
             </div>

@@ -1,13 +1,14 @@
 import  { GET_EMAIL_LIST_FOR_INBOX , POST_INBOX_NEW_MESSAGE, GET_INBOX_MESSAGES } from './types';
 import axios from 'axios';
 import swal from 'sweetalert';
+import {rooturl} from '../config/settings';
 
 export const getEmailList = () => async (dispatch) => {
     var token = localStorage.getItem("token");
     axios.defaults.withCredentials = true;
     await axios({
         method: 'get',
-        url: 'http://localhost:3001/emailList',
+        url: 'http://'+rooturl+':3001/emailList',
         config: { headers: { 'Content-Type': 'application/json' } },
         headers: {"Authorization" : `Bearer ${token}`}
     })
@@ -37,7 +38,7 @@ export const postMessage = (data) => async (dispatch) => {
     await axios({
         method: 'post',
         data: data,
-        url: 'http://localhost:3001/inbox/new/message',
+        url: 'http://'+rooturl+':3001/inbox/new/message',
         config: { headers: { 'Content-Type': 'application/json' } },
         headers: {"Authorization" : `Bearer ${token}`}
     })
@@ -67,7 +68,7 @@ export const getInboxMessages = (email) => async (dispatch) => {
     await axios({
         method: 'get',
         params: {email: email},
-        url: 'http://localhost:3001/inbox/messages',
+        url: 'http://'+rooturl+':3001/inbox/messages',
         config: { headers: { 'Content-Type': 'application/json' } },
         headers: {"Authorization" : `Bearer ${token}`}
     })

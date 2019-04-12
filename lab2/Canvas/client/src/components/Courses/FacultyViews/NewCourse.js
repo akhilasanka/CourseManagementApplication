@@ -4,6 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 class NewCourse extends Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class NewCourse extends Component {
         var token = localStorage.getItem("token");
        await axios({
             method: 'post',
-            url: 'http://localhost:3001/course/new',     
+            url: 'http://'+rooturl+':3001/course/new',     
             data: { "id": formData.get("courseID"), "name": formData.get("name"), "dept": formData.get("dept"), 
                     "desc": formData.get("desc"), "room": formData.get("room"), "capacity": formData.get("capacity"), 
                     "waitlistCapacity": formData.get("waitlistCapacity"), "courseTerm": formData.get("term"),"faculty_id" : facultyID , "faculty_name" : facultyName },

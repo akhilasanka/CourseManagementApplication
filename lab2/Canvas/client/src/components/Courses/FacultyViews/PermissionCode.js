@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
-
+import { rooturl } from '../../../config/settings';
 
 class PermissionCode extends Component {
     constructor(props) {
@@ -21,7 +21,7 @@ class PermissionCode extends Component {
             var token = localStorage.getItem("token");
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/waitlistStudents',
+                url: 'http://'+rooturl+':3001/waitlistStudents',
                 params: { "facultyID": facultyID },
                 config: { headers: { 'Content-Type': 'application/json' } },
                 headers: {"Authorization" : `Bearer ${token}`}
@@ -51,7 +51,7 @@ class PermissionCode extends Component {
         var token = localStorage.getItem("token");
       await axios({
             method: 'put',
-            url: 'http://localhost:3001/generateWaitlistCode',
+            url: 'http://'+rooturl+':3001/generateWaitlistCode',
             params: { "studentID": studentID, "courseID":courseID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}

@@ -3,12 +3,12 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import CourseNav from './FacultyCourseNav';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/activeTab.css';
 import { Page, Document, pdfjs } from 'react-pdf';
 import '../../cssFiles/pdfGrade.css';
 import swal from 'sweetalert';
+import { rooturl } from '../../../config/settings';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -29,7 +29,7 @@ class GradeAssignment extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/assignmentsubmission/details',
+            url: 'http://'+rooturl+':3001/assignmentsubmission/details',
             params: { submissionID: submissionID },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: {"Authorization" : `Bearer ${token}`}
@@ -81,7 +81,7 @@ class GradeAssignment extends Component {
         var token = localStorage.getItem("token");
        await axios({
             method: 'put',
-            url: 'http://localhost:3001/assignmentsubmission/marks',     
+            url: 'http://'+rooturl+':3001/assignmentsubmission/marks',     
             params: { assignmentID: assignmentID, studentID: studentID, marks:marks},
             config: { headers: { 'Content-Type': 'multipart/form-data' } },
             headers: {"Authorization" : `Bearer ${token}`}

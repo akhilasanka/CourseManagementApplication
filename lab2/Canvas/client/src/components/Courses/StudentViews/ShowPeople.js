@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Navigation from '../../Nav/Nav';
 import '../../cssFiles/courseNav.css';
 import swal from 'sweetalert';
-
+import { rooturl } from '../../../config/settings';
 
 class ShowPeople extends Component {
     constructor(props) {
@@ -27,7 +27,7 @@ class ShowPeople extends Component {
         var token = localStorage.getItem("token");
         axios({
             method: 'get',
-            url: 'http://localhost:3001/course/students',
+            url: 'http://'+rooturl+':3001/course/students',
             params: { "courseID": id },
             config: { headers: { 'Content-Type': 'application/json' } },
             headers: { "Authorization": `Bearer ${token}` }
