@@ -15,11 +15,16 @@ export const authLogin = (data) => dispatch => {
                 if (response.status >= 500) {
                     throw new Error("Bad response from server");
                 }
+                console.log(response);
                 return response.data;
             })
             .then((responseData) => {
                 if (responseData.validUser == true) {
                     localStorage.setItem("token", responseData.token);
+                    localStorage.setItem("cookie1", responseData.cookies.cookie1);
+                    localStorage.setItem("cookie2", responseData.cookies.cookie2);
+                    localStorage.setItem("cookie3", responseData.cookies.cookie3);
+                    localStorage.setItem("cookie4", responseData.cookies.cookie4);
                     dispatch({
                         type: AUTH_LOGIN,
                         authFlag: true,

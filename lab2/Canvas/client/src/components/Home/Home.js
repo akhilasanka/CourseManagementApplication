@@ -83,9 +83,9 @@ class Home extends Component {
             )
         });
         let redirectVar = '';
-        if (!cookie.load('cookie1')) {
+        /*if (!cookie.load('cookie1')) {
             redirectVar = <Redirect to="/login" />
-        }
+        }*/
         return (
             <div>
                 {redirectVar}

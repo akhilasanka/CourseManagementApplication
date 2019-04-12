@@ -54,13 +54,8 @@ router.post('/login', function (req, res) {
       var token = jwt.sign({ id: result.user._id, email: result.user.email }, config.secret_key, {
         expiresIn: 7200 // expires in 2 hours
       });
-      
-      res.cookie('cookie1', result.user.role, { maxAge: 900000, httpOnly: false, path: '/' });
-      res.cookie('cookie2', result.user._id, { maxAge: 900000, httpOnly: false, path: '/' });
-      res.cookie('cookie3', result.user.name, { maxAge: 900000, httpOnly: false, path: '/' });
-      res.cookie('cookie4', result.user.email, { maxAge: 900000, httpOnly: false, path: '/' });
       req.session.user = result.user.email;
-      res.status(200).json({ validUser: true, token: token });
+      res.status(200).json({ validUser: true, token: token, cookies: { cookie1: result.user.role, cookie2: result.user._id, cookie3: result.user.name, cookie4: result.user.email  }  });
       console.log("User found in DB and token is", token);
 
     } else if (result.status === 400){

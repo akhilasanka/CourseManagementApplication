@@ -57,10 +57,11 @@ class Login extends Component {
         //redirect based on successful login
         let redirectVar = null;
         let msgDiv = null;
-        if (cookie.load('cookie1') === "student") {
+        console.log(localStorage.getItem('cookie1'));
+        if (localStorage.getItem('cookie1') === "student") {
             redirectVar = <Redirect to="/student/home" />
         }
-        if (cookie.load('cookie1') === "faculty"){
+        if (localStorage.getItem('cookie1') === "faculty"){
             redirectVar = <Redirect to="/faculty/home" />
         }
         if (this.props.displayErrorMsg == true) {
