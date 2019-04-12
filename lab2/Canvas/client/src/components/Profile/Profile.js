@@ -8,7 +8,7 @@ import { getProfile, removeProfilePic, updateProfile, uploadProfilePic } from '.
 import propTypes from 'prop-types';
 
 
-export class Profile extends Component {
+class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {

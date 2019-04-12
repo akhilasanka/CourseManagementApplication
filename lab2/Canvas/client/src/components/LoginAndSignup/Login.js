@@ -8,7 +8,7 @@ import { authLogin } from '../../actions/loginAction';
 import propTypes from 'prop-types';
 
 //Define a Login Component
-export class Login extends Component {
+class Login extends Component {
     //call the constructor method
     constructor(props) {
         //Call the constrictor of Super class i.e The Component
