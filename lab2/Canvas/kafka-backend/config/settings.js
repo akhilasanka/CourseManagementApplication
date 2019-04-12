@@ -7,4 +7,5 @@ module.exports = {
     'database_host': 'localhost',
     'database_port': '27017',
     'database_name': 'canvas',
+	'connection_string': 'mongodb+srv://root:password631@273-qoppd.mongodb.net/canvas?retryWrites=true'
 };
