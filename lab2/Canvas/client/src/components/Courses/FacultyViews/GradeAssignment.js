@@ -179,7 +179,7 @@ class GradeAssignment extends Component {
                                             <div className="col">
                                                 <div className="row">
                                                     <label htmlFor="marks">Marks:&nbsp;</label>
-                                                <input type="number" className="form-control" name="marks" style={{width:"50%"}} value={this.state.marks} onChange={this.handleChange} required />
+                                                <input type="number" className="form-control" name="marks" style={{width:"50%"}} value={this.state.marks} onChange={this.handleChange} required min="0" max="10"/>
                                                 <label>/10</label>
                                                 </div>
                                             </div>

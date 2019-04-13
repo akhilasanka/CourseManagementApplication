@@ -14,7 +14,7 @@ import Draggable, { DraggableCore } from 'react-draggable';
 const SortableContainer = sortableContainer(({children}) => {
   return <div>{children}</div>;
 });*/
-import {rooturl} from '../../config/settings';
+import {rooturl, clienturl} from '../../config/settings';
 
 class Home extends Component {
 
@@ -66,7 +66,7 @@ class Home extends Component {
     render() {
         //iterate over courses to create a table row
         let coursesDiv = this.state.courses.map((course, index) => {
-            let url = "http://"+rooturl+":3000/"+localStorage.getItem('cookie1')+"/course/"+course.course_id+"/files";
+            let url = "http://"+clienturl+":3000/"+localStorage.getItem('cookie1')+"/course/"+course.course_id+"/files";
             console.log(url);
             return (
                 /*<SortableItem key={`course-${index}`} index={index} >*/

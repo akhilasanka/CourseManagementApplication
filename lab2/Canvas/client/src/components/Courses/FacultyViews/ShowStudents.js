@@ -54,13 +54,13 @@ class ShowStudents extends Component {
     }
 
 
-    drop = async (event, studentID) => {
+    drop = async (event, studentID, status) => {
         event.preventDefault();
         var courseID = this.props.match.params.courseID;
         await axios({
             method: 'delete',
             url: 'http://'+rooturl+':3001/student/course/delete',
-            params: { courseID: courseID, studentID: studentID },
+            params: { courseID: courseID, studentID: studentID, status: status },
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
             .then((response) => {
@@ -130,12 +130,19 @@ class ShowStudents extends Component {
             noRecordsMsgDiv = <tr><small>*No records to disply</small></tr>
         }
         let studentDetailsDiv = this.state.studentsDisplaySet.map((record, index) => {
+            let arr = record.courses;
+            var course = arr.filter(function (element, index) {
+                return element.course_id == id;
+            });
+            console.log(course);
+            console.log(course[0].status);
             return (
                 <tr key={record._id}>
                     <td>{record.name}</td>
-                    <td>{record.dept} {id}</td>
+                    <td>{course[0].dept} {id}</td>
+                    <td>{course[0].status}</td>
                     <td>Student</td>
-                    <td><button type="button" className="btn btn-primary" onClick={(e) => this.drop(e, record._id)}>Drop</button> </td>
+                    <td><button type="button" className="btn btn-primary" onClick={(e) => this.drop(e, record._id, course[0].status)}>Drop</button> </td>
                 </tr>
             )
         });
@@ -199,6 +206,7 @@ class ShowStudents extends Component {
                                                     <tr>
                                                         <th>Name</th>
                                                         <th>Course</th>
+                                                        <th>Status</th>
                                                         <th>Role</th>
                                                         <th></th>
                                                     </tr>

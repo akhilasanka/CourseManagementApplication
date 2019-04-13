@@ -181,8 +181,13 @@ function enrollCourse(msg, callback) {
                                             console.log("unable to update enrolled students", err);
                                             callback(err, "Database Error");
                                         } else {
+                                            if(result){
                                             console.log("Enrolled student count incremented");
                                             callback(null, { status: 200, result });
+                                            }
+                                            else{
+                                                console.log(err);
+                                            }
                                         }
                                     });
                                 }
@@ -269,20 +274,27 @@ function deleteCourse(msg, callback) {
             callback(err, "Database Error");
         } else {
             if (rows) {
+                console.log(rows);
                 Users.findOneAndUpdate({ _id: msg.body.studentID }, { $pull: { 'courses': { course_id: parseInt(msg.body.courseID) } } }, function (err, result) {
                     if (err) {
                         console.log("unable to update database", err);
                         callback(err, "Database Error");
                     } else {
-                        console.log("Deletion Successful");
+                        console.log("Deletion Successful......");
                         if (msg.body.status === 'E') {
-                            Courses.findOneAndUpdate({ id: msg.body.courseID }, { $inc: { currentEnrolledStudents: -1 } }, function (err, result) {
+                            Courses.findOneAndUpdate({ id: parseInt(msg.body.courseID) }, { $inc: { currentEnrolledStudents: -1 } }, function (err, result) {
                                 if (err) {
                                     console.log("unable to update enrolled students", err);
                                     callback(err, "Database Error");
                                 } else {
+                                    if(result){
+                                    console.log(result);
                                     console.log("Enrolled student count decremented");
                                     callback(null, { status: 200, result });
+                                    }
+                                    else{
+                                        console.log(err);
+                                    }
                                 }
                             });
                         } else {
@@ -291,6 +303,7 @@ function deleteCourse(msg, callback) {
                                     console.log("unable to update enrolled students", err);
                                     callback(err, "Database Error");
                                 } else {
+                                   
                                     console.log("Enrolled student count decremented");
                                     callback(null, { status: 200, result });
                                 }

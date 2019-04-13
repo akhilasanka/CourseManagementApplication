@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
-import { rooturl } from '../../../config/settings';
+import { rooturl, clienturl } from '../../../config/settings';
 
 class NewCourse extends Component {
     constructor(props) {
@@ -35,7 +35,8 @@ class NewCourse extends Component {
             })
             .then((responseData) => {
                 swal(responseData.responseMessage);
-				document.getElementById("newCourseForm").reset();
+                //document.getElementById("newCourseForm").reset();
+                window.location.href = 'http://'+clienturl+":3000/faculty/home";
             }).catch(function (err) {
                 console.log(err)
             }); 

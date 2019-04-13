@@ -4,7 +4,7 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../../Nav/Nav';
 import swal from 'sweetalert';
-import { rooturl } from '../../../config/settings';
+import { rooturl, clienturl } from '../../../config/settings';
 
 
 class QuizQuestions extends Component {
@@ -65,6 +65,7 @@ class QuizQuestions extends Component {
         })
             .then((response) => {
                 console.log(response);
+                window.location.href = 'http://'+clienturl+":3000/student/course/"+courseID+"/grade";
             });
 
     }

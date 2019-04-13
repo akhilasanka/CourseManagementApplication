@@ -113,7 +113,7 @@ router.post('/student/enroll', requireAuth, function (req, res) {
       res.status(200).json({ responseMessage: 'Succesfully Registered!' });
     } else if (result.status === 205){
       console.log("Student already resgistered");
-      res.status(200).json({ responseMessage: 'You are already added to the course. Visit mycourses page.' });
+      res.status(200).json({ responseMessage: 'You are already added to the course. Visit "My Courses" page.' });
     }
   });
 });

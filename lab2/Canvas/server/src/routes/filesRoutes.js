@@ -80,7 +80,7 @@ router.get('/file/base64str', function (req, res) {
     return new Buffer(bitmap).toString('base64');
   }
   try {
-    var filePath = path.join(__dirname + '../../../uploads/courseFiles',fileName);
+    var filePath = path.join(__dirname + '../../../uploads/coursefiles',fileName);
     var base64str = base64_encode(filePath);
     console.log(base64str);
     res.status(200).json({ base64str: base64str });
