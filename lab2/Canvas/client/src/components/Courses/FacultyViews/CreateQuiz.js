@@ -125,7 +125,6 @@ class CreateQuiz extends Component {
                 <tr key={record.id}>
                     <td><a href="" onClick={(event)=>this.openQuestions(event,record._id)}>{record.title}</a></td>
                     <td>{record.points}</td>
-                    <td>{this.getRow(record.isPublished)}</td>
                     <td>{publishRow}</td>
                 </tr>
             )
@@ -216,7 +215,6 @@ class CreateQuiz extends Component {
                                         <tr>
                                             <th>Title</th>
                                             <th>Points</th>
-                                            <th>Is Published?</th>
                                             <th>Publish</th>
                                         </tr>
                                     </thead>

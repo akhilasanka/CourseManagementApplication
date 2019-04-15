@@ -34,9 +34,14 @@ class NewCourse extends Component {
                 return response.data;
             })
             .then((responseData) => {
-                swal(responseData.responseMessage);
                 //document.getElementById("newCourseForm").reset();
+                if(responseData.responseMessage === "Successfully Added!"){
                 window.location.href = 'http://'+clienturl+":3000/faculty/home";
+                swal(responseData.responseMessage);
+                }
+                else{
+                swal(responseData.responseMessage);   
+                }
             }).catch(function (err) {
                 console.log(err)
             }); 

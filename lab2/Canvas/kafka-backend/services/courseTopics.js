@@ -45,7 +45,7 @@ exports.courseService = function courseService(msg, callback) {
 function createNewCourse(msg, callback) {
 
     console.log("In create New Course topic service. Msg: ", msg);
-    Courses.findOne({ id: msg.id }, function (err, rows) {
+    Courses.findOne({ id: msg.body.id }, function (err, rows) {
         if (err) {
             console.log(err);
             console.log("unable to read the database");

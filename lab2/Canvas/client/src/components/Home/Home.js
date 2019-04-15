@@ -4,16 +4,9 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../Nav/Nav';
 import '../cssFiles/homeCards.css';
-import Draggable, { DraggableCore } from 'react-draggable';
-//import { Responsive as ResponsiveGridLayout } from 'react-grid-layout';
-//import {sortableContainer, sortableElement} from 'react-sortable-hoc';
-//import arrayMove from 'array-move';
-
-/*const SortableItem = sortableElement(({value}) => <div>{value}</div>);
-
-const SortableContainer = sortableContainer(({children}) => {
-  return <div>{children}</div>;
-});*/
+//import Draggable, { DraggableCore } from 'react-draggable';
+import Reorder from 'react-reorder';
+import Card from './Card';
 import {rooturl, clienturl} from '../../config/settings';
 
 class Home extends Component {
@@ -70,7 +63,6 @@ class Home extends Component {
             console.log(url);
             return (
                 /*<SortableItem key={`course-${index}`} index={index} >*/
-                <Draggable>
                     <div className="card card-custom mx-5 mb-5" key={index} style={{ boxShadow: "2px 2px 2px #888888" }}>
                         <div className="color-div" style={{ padding: "4rem", background: "wheat" }}>
                         </div>
@@ -82,7 +74,6 @@ class Home extends Component {
                             <i className="fa fa-folder-o" aria-hidden="true"></i>
                         </div>
                     </div>
-                    </Draggable>
                /* </SortableItem> */
             )
         });
@@ -97,11 +88,24 @@ class Home extends Component {
                     <Navigation />
                     <div className="container">
                         {this.state.courses.length > 0 ?
-                            <div className="row mt-5">
-                               {/* <SortableContainer onSortEnd={this.onSortEnd} axis="xy"> */}
-                                    {coursesDiv}
-                                {/*</SortableContainer> */}
-                            </div>
+                            <div className='rowC' style={{ display: "flex", flexDirection: "row" }}>
+                            <Reorder
+              // The key of each object in your list to use as the element key
+              itemKey='reorderable-cards'
+              // The milliseconds to hold an item for before dragging begins
+              holdTime={200}
+              // The list to display
+              list={this.state.courses}
+              // A template to display for each list item
+              template={Card}
+              // Function that is called once a reorder has been performed
+              callback={this.callback}
+              // Class to be applied to the outer list element
+              listClass='row'
+              // Class to be applied to each list item's wrapper element
+              itemClass=''
+/>
+</div>
                             :
                             <div>
                                 <h2 style={{margin: "3em"}}>Welcome to Canvas!</h2>
