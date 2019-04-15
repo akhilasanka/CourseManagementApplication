@@ -11,6 +11,10 @@ AssignmentSubmissionSchema = new Schema({
     type: String,
     default: ''
   },
+  student_name: {
+    type: String,
+    default: ''
+  },
   assignment_id: {
     type: String,
     default: ''

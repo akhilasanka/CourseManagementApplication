@@ -149,6 +149,7 @@ class CourseAssignmentSubmissions extends Component {
                 <tr key={record._id}>
 
                     <td>{record.student_id}</td>
+                    <td>{record.student_name}</td>
                     <td><a href="" onClick={(event) => this.openSubmissions(event, record)}>{record.file_name}</a></td>
                     <td>{time}</td>
                     <td>{record.marks}</td>
@@ -214,6 +215,7 @@ class CourseAssignmentSubmissions extends Component {
                                                         <thead>
                                                             <tr>
                                                                 <th>Student ID</th>
+                                                                <th>Student Name</th>
                                                                 <th>File</th>
                                                                 <th>Time of Submission</th>
                                                                 <th>Marks</th>

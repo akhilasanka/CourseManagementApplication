@@ -58,12 +58,14 @@ class SubmitAssignments extends Component {
         const formDataCurrent = new FormData(event.target);
         var courseID = this.props.match.params.courseID;
         var studentID = localStorage.getItem('cookie2');
+        var studentName = localStorage.getItem('cookie3');
         var assignmentID = this.props.match.params.assignmentID;
         var comments = formDataCurrent.get('desc');
 
         let formData = new FormData();
         formData.append('courseID', courseID);
         formData.append('studentID', studentID);
+        formData.append('studentName', studentName);
         formData.append('assignmentID', assignmentID);
         formData.append('comments', comments);
         formData.append('selectedFile', this.state.selectedFile);

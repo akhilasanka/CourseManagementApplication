@@ -83,6 +83,7 @@ function submitAssignment(msg, callback) {
     let assignmentData = {
         "course_id": msg.body.courseID,
         "student_id": msg.body.studentID,
+        "student_name" : msg.body.studentName,
         "assignment_id": msg.body.assignmentID,
         "comments": msg.body.comments,
         "file_name": msg.filename,
