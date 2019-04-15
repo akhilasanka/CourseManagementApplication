@@ -16,7 +16,7 @@ class ShowStudents extends Component {
             startIndex: 0,
             currentPage: 1,
             studentsDisplaySet : [],
-            pagesPerPage: 4
+            pagesPerPage: 5
         }
         this.handlePagination = this.handlePagination.bind(this);
     }

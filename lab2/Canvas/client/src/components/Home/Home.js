@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navigation from '../Nav/Nav';
 import '../cssFiles/homeCards.css';
@@ -8,6 +6,8 @@ import '../cssFiles/homeCards.css';
 import Reorder from 'react-reorder';
 import Card from './Card';
 import {rooturl, clienturl} from '../../config/settings';
+import { connect } from 'react-redux';
+import { getCourses } from '../../actions/courseAction';
 
 class Home extends Component {
 
@@ -18,7 +18,7 @@ class Home extends Component {
         }
     }
     //get the courses from backend  
-    componentDidMount() {
+    async componentDidMount() {
         var role = localStorage.getItem('cookie1');
         console.log(role);
         var id = localStorage.getItem('cookie2');
@@ -32,29 +32,16 @@ class Home extends Component {
             url = "http://"+rooturl+":3001/student/home";
             console.log(url);
         }
-        axios({
-            method: 'get',
-            url: url,
-            params: { "id": id },
-            config: { headers: { 'Content-Type': 'application/json' } },
-            headers: {"Authorization" : `Bearer ${token}`}
-        })
-            .then((response) => {
-                //update the state with the response data
-                if(response.data.courses){
-                this.setState({
-                    courses: this.state.courses.concat(response.data.courses)
-                });
-                console.log(this.state.courses);
-            }
-            });
+        await this.props.getCourses(url, id);
+        let courses = [];
+        courses = this.props.courseList;
+        //console.log(this.props.courseList);
+        this.setState({
+            courses: this.state.courses.concat(courses)
+        });
+        //console.log(this.state.courses);
     }
 
-    /*onSortEnd = ({oldIndex, newIndex}) => {
-        this.setState(({courses}) => ({
-            courses: arrayMove(courses, oldIndex, newIndex),
-        }));
-      };*/
 
     render() {
         //iterate over courses to create a table row
@@ -118,4 +105,8 @@ class Home extends Component {
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    courseList: state.courses.courseList
+});
+
+export default connect(mapStateToProps, { getCourses })(Home);
