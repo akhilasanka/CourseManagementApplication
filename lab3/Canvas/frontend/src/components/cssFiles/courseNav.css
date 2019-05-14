@@ -1,0 +1,27 @@
+.course-nav-btn:active{
+    background-color: #005a8b;
+    color: #fff;
+    text-decoration: none;
+}
+
+.course-nav-btn:hover {
+    background-color: #005a8b;
+    color: white; 
+    text-decoration: none;
+}
+
+.course-nav-btn{
+    color:black;
+}
+
+.active-css{
+    background-color: #005a8b;
+    color: #fff;
+    text-decoration: none;
+}
+
+.active-tab{
+    background-color: #005a8b;
+    color: white; 
+    text-decoration: none;
+}
